@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useAssessment } from '../../contexts/AssessmentContext';
 import Button from '../ui/Button';
+import { saveUserData } from '../../lib/saveUserData';
 
 export default function Results() {
   const { results, biodata, selectedRole, resetAssessment } = useAssessment();
   const [activeTab, setActiveTab] = useState('overview');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(null);
   
   // Map role IDs to readable names
   const roleNames = {
@@ -27,31 +30,46 @@ export default function Results() {
   
   const successRateInfo = getSuccessRateInfo(results.successRate);
   
-  // Color classes for success rate
-  const colorClasses = {
-    red: 'text-red-600 bg-red-100 dark:bg-red-900/20 dark:text-red-400',
-    yellow: 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400',
-    blue: 'text-blue-600 bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400',
-    green: 'text-green-600 bg-green-100 dark:bg-green-900/20 dark:text-green-400'
-  };
+  // Remove unused colorClasses variable
   
   // Handle saving results
-  const handleSaveResults = () => {
-    // This is where you would implement saving to a database or API
-    // For now, we'll just simulate with a console log
-    console.log('Saving results for:', biodata.fullName, biodata.email);
+  const handleSaveResults = async () => {
+    setIsSaving(true);
     
-    // Show a confirmation alert for demonstration
-    alert(`Results saved for ${biodata.fullName}!`);
+    try {
+      // Create a results object with the most important data
+      const resultsData = {
+        role: selectedRole,
+        roleName: roleNames[selectedRole],
+        successRate: results.successRate,
+        strengths: results.strengths,
+        weaknesses: results.weaknesses,
+        recommendations: results.recommendations.map(rec => rec.courseName)
+      };
+      
+      // Save user data along with results
+      const response = await saveUserData(biodata, resultsData);
+      
+      if (response.success) {
+        setSaveStatus({ type: 'success', message: 'Results saved successfully!' });
+      } else {
+        setSaveStatus({ type: 'error', message: 'Error saving results. Please try again.' });
+      }
+    } catch (error) {
+      console.error('Error saving results:', error);
+      setSaveStatus({ type: 'error', message: 'An unexpected error occurred.' });
+    } finally {
+      setIsSaving(false);
+    }
   };
   
   return (
-    <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
-      <div className="p-8">
+    <div className="max-w-4xl w-full mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+      <div className="p-10">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-2">Your Assessment Results</h2>
           <p className="text-gray-600 dark:text-gray-400">
-            Based on your responses, here's your potential career path analysis
+            Based on your responses, here&apos;s your potential career path analysis
           </p>
         </div>
         
@@ -221,20 +239,30 @@ export default function Results() {
           </div>
         )}
         
+        {/* Status Message */}
+        {saveStatus && (
+          <div className={`mt-4 p-3 rounded-lg ${saveStatus.type === 'success' ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300'}`}>
+            {saveStatus.message}
+          </div>
+        )}
+        
         {/* Actions */}
         <div className="flex flex-col sm:flex-row justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
           <Button 
             variant="secondary" 
             onClick={resetAssessment}
+            className="mb-4 sm:mb-0 w-full sm:w-auto"
           >
             Start Over
           </Button>
           
-          <div className="mt-4 sm:mt-0">
-            <Button onClick={handleSaveResults}>
-              Save My Results
-            </Button>
-          </div>
+          <Button 
+            onClick={handleSaveResults}
+            disabled={isSaving}
+            className="w-full sm:w-auto"
+          >
+            {isSaving ? 'Saving...' : 'Save My Results'}
+          </Button>
         </div>
       </div>
     </div>

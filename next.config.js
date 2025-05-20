@@ -3,11 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: ['images.unsplash.com'], // For any remote images you might use
-  },
-  // Explicitly disable the App Router to use Pages Router only
-  experimental: {
-    appDir: false
   }
+  // Removed the experimental.appDir option that was causing errors
 };
 
 module.exports = nextConfig;
