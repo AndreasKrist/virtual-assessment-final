@@ -6,18 +6,23 @@ export default function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // After mounting, we can show the toggle (to avoid hydration mismatch)
+  // After mounting, we can show the toggle
   useEffect(() => setMounted(true), []);
 
-  // Force an update when the theme changes to ensure DOM reflects the theme
-  useEffect(() => {
-    const html = document.documentElement;
-    if (theme === 'dark' || (theme === 'system' && resolvedTheme === 'dark')) {
-      html.classList.add('dark');
-    } else {
-      html.classList.remove('dark');
-    }
-  }, [theme, resolvedTheme]);
+  const toggleTheme = () => {
+    const currentTheme = theme === 'system' ? resolvedTheme : theme;
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    // Apply the theme classes directly to ensure immediate visual update
+    document.documentElement.classList.remove('dark', 'light');
+    document.documentElement.classList.add(newTheme);
+    
+    // Then update the theme context
+    setTheme(newTheme);
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('theme', newTheme);
+  };
 
   if (!mounted) {
     return (
@@ -38,7 +43,7 @@ export default function ThemeToggle() {
     <button
       aria-label={currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
       className="p-3 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none transition-colors"
-      onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
+      onClick={toggleTheme}
     >
       {currentTheme === 'dark' ? (
         <Sun size={20} className="text-yellow-500" />

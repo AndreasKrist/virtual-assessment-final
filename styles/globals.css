@@ -10,11 +10,16 @@
   }
   
   body {
-    @apply bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200;
+    @apply bg-gray-50 text-gray-800;
     font-feature-settings: "kern";
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Proper dark mode styles */
+  html.dark body {
+    @apply bg-gray-900 text-gray-200;
   }
 
   /* Common focus styles */
@@ -22,26 +27,34 @@
     @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900;
   }
   
-  /* Improve dark mode text contrast */
-  .dark h1, .dark h2, .dark h3, .dark h4 {
+  /* Dark mode text improvements */
+  html.dark h1, 
+  html.dark h2, 
+  html.dark h3, 
+  html.dark h4 {
     @apply text-gray-100;
   }
   
-  .dark p {
+  html.dark p {
     @apply text-gray-300;
   }
   
-  /* Dark mode background variations */
-  .dark .bg-white {
+  /* Background element overrides for dark mode */
+  html.dark .bg-white {
     @apply bg-gray-800;
   }
   
-  .dark .bg-gray-50 {
+  html.dark .bg-gray-50 {
     @apply bg-gray-900;
   }
   
-  .dark .bg-blue-50 {
+  html.dark .bg-blue-50 {
     @apply bg-blue-900/20;
+  }
+  
+  /* Border colors for dark mode */
+  html.dark .border-gray-200 {
+    @apply border-gray-700;
   }
 }
 

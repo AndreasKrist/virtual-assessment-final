@@ -4,20 +4,35 @@ import Header from './Header';
 import Footer from './Footer';
 
 export default function Layout({ children }) {
-  const { theme, resolvedTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   
-  // Ensure dark mode class is applied to the html element
+  // Force light mode on initial load and ensure theme is properly applied
   useEffect(() => {
-    const html = document.documentElement;
-    if (theme === 'dark' || (theme === 'system' && resolvedTheme === 'dark')) {
-      html.classList.add('dark');
-    } else {
-      html.classList.remove('dark');
-    }
+    // Force light mode on initial load if not already set
+    const initialTheme = localStorage.getItem('theme') || 'light';
+    setTheme(initialTheme);
+    
+    // Ensure proper class is immediately applied to avoid flash
+    document.documentElement.classList.remove('dark', 'light');
+    document.documentElement.classList.add(initialTheme === 'dark' ? 'dark' : 'light');
+  }, []);
+  
+  // Watch for theme changes
+  useEffect(() => {
+    if (!theme) return;
+    
+    const currentTheme = theme === 'system' ? resolvedTheme : theme;
+    document.documentElement.classList.remove('dark', 'light');
+    document.documentElement.classList.add(currentTheme);
+    
+    // Force repaint for all Tailwind classes
+    document.body.style.display = 'none';
+    document.body.offsetHeight; // Force a reflow
+    document.body.style.display = '';
   }, [theme, resolvedTheme]); 
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <Header />
       <main className="flex-grow">
         {children}

@@ -10,8 +10,9 @@ export default function Button({
   className = '',
   ...props 
 }) {
-  const baseClasses = "rounded-lg font-medium transition-colors duration-200 focus:outline-none";
+  const baseClasses = "rounded-lg font-medium focus:outline-none";
   
+  // Define color classes explicitly for light and dark modes
   const variantClasses = {
     primary: "bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600 disabled:bg-blue-300 dark:disabled:bg-blue-400/50",
     secondary: "bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600",
@@ -30,6 +31,7 @@ export default function Button({
     ${variantClasses[variant]} 
     ${sizeClasses[size]} 
     ${disabled ? 'cursor-not-allowed' : ''}
+    transition-colors duration-200
     ${className}
   `;
   
@@ -39,6 +41,7 @@ export default function Button({
       className={classes}
       disabled={disabled}
       onClick={onClick}
+      data-variant={variant}
       {...props}
     >
       {children}
