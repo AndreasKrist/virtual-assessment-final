@@ -3,11 +3,21 @@ import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
 
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // After mounting, we can show the toggle (to avoid hydration mismatch)
   useEffect(() => setMounted(true), []);
+
+  // Force an update when the theme changes to ensure DOM reflects the theme
+  useEffect(() => {
+    const html = document.documentElement;
+    if (theme === 'dark' || (theme === 'system' && resolvedTheme === 'dark')) {
+      html.classList.add('dark');
+    } else {
+      html.classList.remove('dark');
+    }
+  }, [theme, resolvedTheme]);
 
   if (!mounted) {
     return (
@@ -22,16 +32,18 @@ export default function ThemeToggle() {
     );
   }
 
+  const currentTheme = theme === 'system' ? resolvedTheme : theme;
+
   return (
     <button
-      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="p-2 rounded-md text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none"
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      aria-label={currentTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      className="p-3 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none transition-colors"
+      onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
     >
-      {theme === 'dark' ? (
-        <Sun size={20} />
+      {currentTheme === 'dark' ? (
+        <Sun size={20} className="text-yellow-500" />
       ) : (
-        <Moon size={20} />
+        <Moon size={20} className="text-blue-500" />
       )}
     </button>
   );
