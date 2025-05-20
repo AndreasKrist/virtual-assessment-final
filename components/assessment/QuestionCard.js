@@ -35,21 +35,21 @@ export default function QuestionCard() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
-      <div className="p-8">
+    <div className="max-w-4xl w-full mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+      <div className="p-10">
         <ProgressBar 
           current={progress.current + 1} 
           total={progress.total}
-          className="mb-8"
+          className="mb-10"
         />
         
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-6">{question.text}</h2>
+        <div className="mb-10">
+          <h2 className="text-2xl font-semibold mb-8 text-gray-800 dark:text-gray-100">{question.text}</h2>
           
-          <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+          <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-6">
             <Button
               variant={currentAnswer === true ? 'primary' : 'outline'}
-              className="flex-1 flex justify-center"
+              className="flex-1 py-4 text-lg flex justify-center"
               onClick={() => handleAnswer(true)}
             >
               Yes
@@ -57,7 +57,7 @@ export default function QuestionCard() {
             
             <Button
               variant={currentAnswer === false ? 'primary' : 'outline'}
-              className="flex-1 flex justify-center"
+              className="flex-1 py-4 text-lg flex justify-center"
               onClick={() => handleAnswer(false)}
             >
               No
@@ -65,7 +65,7 @@ export default function QuestionCard() {
           </div>
           
           {currentAnswer === false && (
-            <div className="mt-6">
+            <div className="mt-8">
               <button
                 onClick={() => setShowExplanation(!showExplanation)}
                 className="text-blue-600 dark:text-blue-400 text-sm font-medium flex items-center"
@@ -83,7 +83,7 @@ export default function QuestionCard() {
               </button>
               
               {showExplanation && (
-                <div className="mt-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-sm">
+                <div className="mt-4 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-sm">
                   <p className="text-gray-700 dark:text-gray-300">
                     This skill is covered in our <span className="font-semibold">{question.courseRecommendation}</span> course,
                     which helps you understand {question.category} concepts and practical applications.
@@ -98,6 +98,7 @@ export default function QuestionCard() {
           <Button 
             variant="secondary" 
             onClick={prevStage}
+            className="px-6 py-3 text-base"
           >
             Back
           </Button>
@@ -105,6 +106,7 @@ export default function QuestionCard() {
           <Button 
             onClick={handleNext}
             disabled={currentAnswer === undefined}
+            className="px-6 py-3 text-base"
           >
             {progress.current + 1 === progress.total ? 'See Results' : 'Next'}
           </Button>

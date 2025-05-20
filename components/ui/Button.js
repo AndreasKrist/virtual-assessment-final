@@ -13,10 +13,10 @@ export default function Button({
   const baseClasses = "rounded-lg font-medium transition-colors duration-200 focus:outline-none";
   
   const variantClasses = {
-    primary: "bg-blue-600 hover:bg-blue-700 text-white disabled:bg-blue-300",
+    primary: "bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600 disabled:bg-blue-300 dark:disabled:bg-blue-400/50",
     secondary: "bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600",
     outline: "border border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/20 disabled:border-blue-300 disabled:text-blue-300",
-    danger: "bg-red-600 hover:bg-red-700 text-white disabled:bg-red-300",
+    danger: "bg-red-600 hover:bg-red-700 text-white dark:bg-red-500 dark:hover:bg-red-600 disabled:bg-red-300",
   };
   
   const sizeClasses = {

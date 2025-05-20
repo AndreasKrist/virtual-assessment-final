@@ -10,7 +10,7 @@
   }
   
   body {
-    @apply bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100;
+    @apply bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200;
     font-feature-settings: "kern";
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -20,6 +20,28 @@
   /* Common focus styles */
   *:focus-visible {
     @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900;
+  }
+  
+  /* Improve dark mode text contrast */
+  .dark h1, .dark h2, .dark h3, .dark h4 {
+    @apply text-gray-100;
+  }
+  
+  .dark p {
+    @apply text-gray-300;
+  }
+  
+  /* Dark mode background variations */
+  .dark .bg-white {
+    @apply bg-gray-800;
+  }
+  
+  .dark .bg-gray-50 {
+    @apply bg-gray-900;
+  }
+  
+  .dark .bg-blue-50 {
+    @apply bg-blue-900/20;
   }
 }
 
@@ -42,5 +64,5 @@
 /* Transitions for dark/light mode */
 .transition-colors {
   transition-property: color, background-color, border-color, fill, stroke;
-  transition-duration: 200ms;
+  transition-duration: 300ms;
 }

@@ -4,7 +4,10 @@ const nextConfig = {
   images: {
     domains: ['images.unsplash.com'], // For any remote images you might use
   },
-  // You can add more Next.js configuration options here as needed
+  // Explicitly disable the App Router to use Pages Router only
+  experimental: {
+    appDir: false
+  }
 };
 
 module.exports = nextConfig;
