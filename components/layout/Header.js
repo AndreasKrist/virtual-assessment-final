@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
+import { useAssessment } from '../../contexts/AssessmentContext';
 
 export default function Header() {
-  // Removed the unused router variable
   const [scrolled, setScrolled] = useState(false);
   
   // Handle scroll effect
@@ -37,14 +37,17 @@ export default function Header() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {/* LOGO */}
             <motion.div 
               className="mr-3 flex items-center justify-center"
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <img src="/images/itel-logo.png" alt="ITEL Logo" className="h-10 w-auto"/>
+              <img 
+                src="/images/itel-logo.png" 
+                alt="ITEL Logo" 
+                className="h-10 w-auto"
+              />
             </motion.div>
             <span className="text-xl font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
               ITEL - PTSA
@@ -70,7 +73,16 @@ export default function Header() {
 // NavLink component with animations
 function NavLink({ href, label }) {
   const router = useRouter();
+  const { nextStage } = useAssessment();
   const isActive = router.pathname === href;
+  
+  const handleClick = (e) => {
+    if (href === '/assessment' && router.pathname !== '/assessment') {
+      e.preventDefault();
+      nextStage();
+      router.push(href);
+    }
+  };
   
   return (
     <Link href={href}>
@@ -78,6 +90,7 @@ function NavLink({ href, label }) {
         className={`relative cursor-pointer py-2 text-sm font-medium ${isActive ? 'text-blue-600' : 'text-blue-800 hover:text-blue-600'}`}
         whileHover={{ y: -2 }}
         transition={{ duration: 0.2 }}
+        onClick={handleClick}
       >
         {label}
         {isActive && (
