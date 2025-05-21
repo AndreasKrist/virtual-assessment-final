@@ -26,7 +26,7 @@ const itemVariants = {
   }
 };
 
-const CardButton = ({ children, onClick, className = '', isSelected = false, icon }) => {
+const CardButton = ({ children, onClick, className = '', isSelected = false }) => {
   return (
     <motion.div
       whileHover={{ scale: 1.02, y: -5 }}

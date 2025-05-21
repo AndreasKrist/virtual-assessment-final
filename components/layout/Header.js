@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 
 export default function Header() {
-  const router = useRouter();
+  // Removed the unused router variable
   const [scrolled, setScrolled] = useState(false);
   
   // Handle scroll effect
