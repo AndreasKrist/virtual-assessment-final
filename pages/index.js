@@ -333,7 +333,7 @@ export default function Home() {
                   onClick={handleStartAssessment}
                   className="px-8 py-4 text-lg"
                 >
-                  Start Your Assessment
+                  Start Assessment
                 </PrimaryButton>
                 
                 <motion.p 

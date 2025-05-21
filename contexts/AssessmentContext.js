@@ -147,18 +147,19 @@ export function AssessmentProvider({ children }) {
     const roleYesCount = Object.values(answers.roleSpecific).filter(answer => answer === true).length;
     
     // Calculate success rate
-    // Formula: If they answer 5/10 correctly: ~75% success rate
-    // If they answer 8/10 correctly: ~90% success rate
+    // Role-specific questions are weighted higher (60% vs 40%)
     const generalWeight = 0.4; // General questions are 40% of the score
     const roleWeight = 0.6;    // Role questions are 60% of the score
     
     const generalScore = generalYesCount / generalQuestions.length;
     const roleScore = roleYesCount / roleQuestions[selectedRole].length;
     
-    // Apply curve to the scores (this makes 5/10 = 75% and 8/10 = 90%)
+    // Apply curve to the scores with a minimum base of 55%
     const curveScore = (score) => {
+      // Minimum score of 55% that scales up based on correct answers
       if (score <= 0.5) {
-        return score * 1.5; // 5/10 = 0.5 → 0.75 (75%)
+        // Start at 55% (when score is 0) and scale up to 75% (when score is 0.5)
+        return 0.55 + (score * 0.4); 
       } else {
         // Linear interpolation between (0.5, 0.75) and (0.8, 0.9)
         return 0.75 + (score - 0.5) * (0.15 / 0.3);
@@ -169,7 +170,9 @@ export function AssessmentProvider({ children }) {
     const curvedRoleScore = curveScore(roleScore);
     
     const weightedScore = (curvedGeneralScore * generalWeight) + (curvedRoleScore * roleWeight);
-    const finalSuccessRate = Math.round(weightedScore * 100);
+    
+    // Ensure minimum score of 55%
+    const finalSuccessRate = Math.max(55, Math.round(weightedScore * 100));
     
     // Identify strengths and weaknesses
     const strengths = [];
@@ -228,8 +231,8 @@ export function AssessmentProvider({ children }) {
     setResults({
       successRate: finalSuccessRate,
       recommendations: topRecommendations,
-      strengths: [...new Set(strengths)], // Remove duplicates
-      weaknesses: [...new Set(weaknesses)] // Remove duplicates
+      strengths: [...new Set(strengths)],
+      weaknesses: [...new Set(weaknesses)]
     });
   };
 

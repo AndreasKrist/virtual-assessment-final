@@ -11,9 +11,9 @@ export default function ResultsPage() {
   
   // Redirect to home if results aren't available yet
   useEffect(() => {
-    if (stage !== 'results' || !results.successRate) {
-      router.push('/');
-    }
+  if (stage !== 'results' || results.successRate === undefined || results.successRate === null) {
+    router.push('/');
+  }
   }, [stage, results, router]);
   
   return (

@@ -61,9 +61,6 @@ export default function Header() {
             <li>
               <NavLink href="/assessment" label="Start Assessment" />
             </li>
-            <li>
-              <NavLink href="/admin" label="Admin" />
-            </li>
           </ul>
         </nav>
       </div>

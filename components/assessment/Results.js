@@ -19,15 +19,20 @@ export default function Results() {
   // Determine success rate color and message
   const getSuccessRateInfo = (rate) => {
     if (rate >= 90) {
-      return { color: 'green', message: 'Excellent! You have a very strong foundation for this role.' };
-    } else if (rate >= 75) {
-      return { color: 'blue', message: 'Good! You have a solid foundation but could benefit from specific courses.' };
+      return { color: 'green', message: 'You have a very strong foundation for this courses.' };
+    } else if (rate >= 80) {
+      return { color: 'blue', message: 'You have a solid foundation but could benefit from specific courses.' };
     } else if (rate >= 60) {
-      return { color: 'yellow', message: 'Fair. With some focused learning, you can improve your chances of success.' };
+      return { color: 'yellow', message: 'With some focused learning, you can improve your chances of success.' };
     } else {
       return { color: 'red', message: 'You may need more preparation before pursuing this role.' };
     }
   };
+
+  // 'Excellent! You have a very strong foundation for this role.'
+  // 'Good! You have a solid foundation but could benefit from specific courses.'
+  // 'Good. With some focused learning, you can improve your chances of success.'
+  // 'You may need more preparation before pursuing this role.'
   
   const successRateInfo = getSuccessRateInfo(results.successRate);
   
@@ -83,9 +88,9 @@ export default function Results() {
     <div className="max-w-4xl w-full mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-blue-100 transition-all duration-150">
       <div className="p-10">
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold mb-2 text-blue-800">Your Assessment Results</h2>
+          <h2 className="text-2xl font-bold mb-2 text-blue-800">Your Assessment Summary</h2>
           <p className="text-blue-600">
-            Based on your responses, here&apos;s your potential career path analysis
+            Based on your responses, here&apos;s your assessment summary analysis
           </p>
         </div>
         
@@ -120,7 +125,7 @@ export default function Results() {
               <div className="mb-6 p-6 rounded-lg bg-blue-50 border border-blue-100">
                 <div className="flex flex-col md:flex-row justify-between items-center">
                   <div>
-                    <h3 className="text-lg font-semibold mb-1 text-blue-800">Success Rate for {roleNames[selectedRole]}</h3>
+                    <h3 className="text-lg font-semibold mb-1 text-blue-800">Unlock your potential with {roleNames[selectedRole]}</h3>
                     <p className="text-blue-600 text-sm mb-4 md:mb-0">
                       {successRateInfo.message}
                     </p>
