@@ -179,7 +179,7 @@ export default function Home() {
                           1
                         </div>
                         <div className="mt-1">
-                          <h3 className="font-semibold text-lg text-blue-800">Choose Your Career Interest</h3>
+                          <h3 className="font-semibold text-lg text-blue-800">Choose Your Area of Discipline</h3>
                           <p className="text-blue-700 text-sm mt-1">
                             Select between Network Administration or Cybersecurity
                           </p>
@@ -230,7 +230,7 @@ export default function Home() {
                 </motion.div>
               </motion.div>
               
-              <h3 className="text-xl font-semibold mb-6 text-center text-blue-800">Choose Your Career Path</h3>
+              <h3 className="text-xl font-semibold mb-6 text-center text-blue-800">Choose Your Area of Discipline</h3>
               
               <motion.div 
                 className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10"

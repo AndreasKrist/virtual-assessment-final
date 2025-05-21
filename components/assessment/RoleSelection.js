@@ -25,7 +25,7 @@ export default function RoleSelection() {
     },
     {
       id: 'cybersecurity',
-      title: 'Cybersecurity Specialist',
+      title: 'Cybersecurity',
       description: 'Protect systems, networks, and data from digital attacks and unauthorized access.',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-blue-500 mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -49,9 +49,9 @@ export default function RoleSelection() {
   return (
     <div className="max-w-4xl w-full mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-blue-200">
       <div className="p-10">
-        <h2 className="text-3xl font-bold mb-3 text-center text-blue-800">Choose Your IT Career Path</h2>
+        <h2 className="text-3xl font-bold mb-3 text-center text-blue-800">Choose Your Area of Discipline</h2>
         <p className="text-blue-700 text-center mb-10 text-lg">
-          Select the role you&apos;re most interested in pursuing
+          Select the area you want to pursue.
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
