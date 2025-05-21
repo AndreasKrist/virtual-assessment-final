@@ -54,7 +54,7 @@ export default function Results() {
       };
       
       // Save user data to localStorage as a backup
-      const localResponse = await saveUserData(biodata, resultsData);
+      await saveUserData(biodata, resultsData);
       
       // Save to Google Sheets
       const sheetsResponse = await saveToGoogleSheet({
