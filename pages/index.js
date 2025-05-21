@@ -122,7 +122,7 @@ export default function Home() {
               transition={{ delay: 0.2, duration: 0.7 }}
             >
               <span className="relative inline-block">
-                Virtual Assessment
+                Prelim Tech Skills Assessor
                 <motion.span 
                   className="absolute -bottom-2 left-0 w-full h-1 bg-blue-500"
                   initial={{ width: 0 }}
@@ -138,7 +138,7 @@ export default function Home() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.7 }}
             >
-              Discover your potential success rate in IT roles and get personalized course recommendations.
+              Unlock Your IT Potential with Personalized Course Recommendations.
             </motion.p>
           </div>
           

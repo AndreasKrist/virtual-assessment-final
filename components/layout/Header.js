@@ -37,18 +37,17 @@ export default function Header() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
+            {/* LOGO */}
             <motion.div 
-              className="mr-3 bg-blue-600 text-white rounded-lg w-10 h-10 flex items-center justify-center"
-              initial={{ rotate: 0 }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: 1, repeatType: "reverse", delay: 1 }}
+              className="mr-3 flex items-center justify-center"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5 }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-              </svg>
+              <img src="/images/itel-logo.png" alt="ITEL Logo" className="h-10 w-auto"/>
             </motion.div>
             <span className="text-xl font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
-              ITEL - Virtual Assessor
+              ITEL - PTSA
             </span>
           </motion.div>
         </Link>
