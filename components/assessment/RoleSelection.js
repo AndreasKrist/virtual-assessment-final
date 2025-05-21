@@ -47,10 +47,10 @@ export default function RoleSelection() {
   };
 
   return (
-    <div className="max-w-4xl w-full mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+    <div className="max-w-4xl w-full mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-blue-200">
       <div className="p-10">
-        <h2 className="text-3xl font-bold mb-3 text-center text-gray-800 dark:text-gray-100">Choose Your IT Career Path</h2>
-        <p className="text-gray-600 dark:text-gray-300 text-center mb-10 text-lg">
+        <h2 className="text-3xl font-bold mb-3 text-center text-blue-800">Choose Your IT Career Path</h2>
+        <p className="text-blue-700 text-center mb-10 text-lg">
           Select the role you&apos;re most interested in pursuing
         </p>
         
@@ -60,27 +60,27 @@ export default function RoleSelection() {
               key={role.id}
               className={`border rounded-xl p-8 cursor-pointer transition-all duration-300 hover:shadow-md ${
                 selectedRole === role.id 
-                  ? 'border-blue-500 ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' 
-                  : 'border-gray-200 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-700'
+                  ? 'border-blue-500 ring-2 ring-blue-500 bg-blue-50' 
+                  : 'border-blue-200 hover:border-blue-300'
               }`}
               onClick={() => handleSelectRole(role.id)}
             >
               <div className="flex flex-col items-center text-center mb-6">
                 {role.icon}
-                <h3 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">{role.title}</h3>
+                <h3 className="text-2xl font-semibold text-blue-800">{role.title}</h3>
               </div>
               
-              <p className="text-gray-600 dark:text-gray-300 mb-6 text-center text-lg">
+              <p className="text-blue-700 mb-6 text-center text-lg">
                 {role.description}
               </p>
               
               <div className="mt-6">
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Key skills:</p>
+                <p className="text-sm font-medium text-blue-700 mb-3">Key skills:</p>
                 <div className="flex flex-wrap gap-2">
                   {role.skills.map((skill) => (
                     <span 
                       key={skill} 
-                      className="inline-block px-3 py-1.5 text-sm bg-gray-100 dark:bg-gray-700 rounded-full"
+                      className="inline-block px-3 py-1.5 text-sm bg-blue-100 text-blue-600 rounded-full"
                     >
                       {skill}
                     </span>

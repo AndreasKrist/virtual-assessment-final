@@ -5,15 +5,15 @@ export default function ProgressBar({ current, total, className = '' }) {
   
   return (
     <div className={`w-full ${className}`}>
-      <div className="flex justify-between text-sm mb-1">
-        <span>Question {current} of {total}</span>
-        <span>{percentage}% Complete</span>
+      <div className="flex justify-between text-sm mb-2">
+        <span className="text-blue-700 font-medium">Question {current} of {total}</span>
+        <span className="text-blue-700 font-medium">{percentage}% Complete</span>
       </div>
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+      <div className="w-full bg-blue-100 rounded-full h-2.5 overflow-hidden">
         <div 
-          className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-in-out"
+          className="bg-gradient-to-r from-blue-500 to-blue-600 h-2.5 rounded-full transition-all duration-150"
           style={{ width: `${percentage}%` }}
-        ></div>
+        />
       </div>
     </div>
   );
