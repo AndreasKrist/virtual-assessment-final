@@ -102,9 +102,9 @@ export default function Home() {
   return (
     <Layout>
       <Head>
-        <title>IT Career Assessment</title>
+        <title>Prelim Tech Skills Assessor</title>
         <meta name="description" content="Discover your potential IT career path and get personalized course recommendations." />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/images/itel-logo.png" />
       </Head>
 
       <div className="container mx-auto px-4 py-12">
