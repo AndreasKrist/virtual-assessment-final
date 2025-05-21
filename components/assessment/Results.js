@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAssessment } from '../../contexts/AssessmentContext';
 import Button from '../ui/Button';
 import { saveUserData } from '../../lib/saveUserData';
+import { saveToGoogleSheet } from '../../lib/googleSheets';
 
 export default function Results() {
   const { results, biodata, selectedRole, resetAssessment } = useAssessment();
@@ -42,20 +43,37 @@ export default function Results() {
         successRate: results.successRate,
         strengths: results.strengths,
         weaknesses: results.weaknesses,
-        recommendations: results.recommendations.map(rec => rec.courseName)
+        recommendations: results.recommendations.map(rec => 
+          typeof rec === 'string' ? rec : rec.courseName
+        )
       };
       
-      // Save user data along with results
-      const response = await saveUserData(biodata, resultsData);
+      // Save user data to localStorage as a backup
+      const localResponse = await saveUserData(biodata, resultsData);
       
-      if (response.success) {
-        setSaveStatus({ type: 'success', message: 'Results saved successfully!' });
+      // Save to Google Sheets
+      const sheetsResponse = await saveToGoogleSheet({
+        ...biodata, 
+        results: resultsData
+      });
+      
+      if (sheetsResponse.success) {
+        setSaveStatus({ 
+          type: 'success', 
+          message: 'Results saved successfully to Google Sheets!' 
+        });
       } else {
-        setSaveStatus({ type: 'error', message: 'Error saving results. Please try again.' });
+        setSaveStatus({ 
+          type: 'error', 
+          message: 'Error saving to Google Sheets. Please try again.' 
+        });
       }
     } catch (error) {
       console.error('Error saving results:', error);
-      setSaveStatus({ type: 'error', message: 'An unexpected error occurred.' });
+      setSaveStatus({ 
+        type: 'error', 
+        message: 'An unexpected error occurred.' 
+      });
     } finally {
       setIsSaving(false);
     }
