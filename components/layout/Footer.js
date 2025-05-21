@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -38,19 +39,19 @@ export default function Footer() {
                   whileHover={{ x: 3 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <a href="/" className="text-blue-700 hover:text-blue-500 text-sm">Home</a>
+                  <Link href="/" className="text-blue-700 hover:text-blue-500 text-sm">Home</Link>
                 </motion.li>
                 <motion.li 
                   whileHover={{ x: 3 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <a href="/assessment" className="text-blue-700 hover:text-blue-500 text-sm">Start Assessment</a>
+                  <Link href="/assessment" className="text-blue-700 hover:text-blue-500 text-sm">Start Assessment</Link>
                 </motion.li>
                 <motion.li 
                   whileHover={{ x: 3 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <a href="/admin" className="text-blue-700 hover:text-blue-500 text-sm">Admin</a>
+                  <Link href="/admin" className="text-blue-700 hover:text-blue-500 text-sm">Admin</Link>
                 </motion.li>
               </ul>
             </div>
@@ -62,19 +63,19 @@ export default function Footer() {
                   whileHover={{ x: 3 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <a href="#" className="text-blue-700 hover:text-blue-500 text-sm">IT Career Guides</a>
+                  <Link href="#" className="text-blue-700 hover:text-blue-500 text-sm">IT Career Guides</Link>
                 </motion.li>
                 <motion.li 
                   whileHover={{ x: 3 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <a href="#" className="text-blue-700 hover:text-blue-500 text-sm">Learning Resources</a>
+                  <Link href="#" className="text-blue-700 hover:text-blue-500 text-sm">Learning Resources</Link>
                 </motion.li>
                 <motion.li 
                   whileHover={{ x: 3 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <a href="#" className="text-blue-700 hover:text-blue-500 text-sm">Support</a>
+                  <Link href="#" className="text-blue-700 hover:text-blue-500 text-sm">Support</Link>
                 </motion.li>
               </ul>
             </div>
