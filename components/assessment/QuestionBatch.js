@@ -43,41 +43,52 @@ export default function QuestionBatch() {
   };
   
   const handleAnswer = (questionId, value) => {
-  console.log('Direct answer update:', questionId, value);
-  
-  // Update local state
-  setBatchAnswers(prev => ({ ...prev, [questionId]: value }));
-  
-  // ALSO update global state immediately
-  const immediateAnswer = { [questionId]: value };
-  recordBatchAnswers(immediateAnswer);
-  
-  // AUTO-SCROLL LOGIC (this is what you're missing!)
-  setTimeout(() => {
-    const currentQuestionIndex = questions.findIndex(q => q.id === questionId);
-    const nextQuestionIndex = currentQuestionIndex + 1;
+    console.log('Direct answer update:', questionId, value);
     
-    // If there's a next question in this batch, scroll to it
-    if (nextQuestionIndex < questions.length) {
-      const nextQuestionElement = document.getElementById(`question-${questions[nextQuestionIndex].id}`);
-      if (nextQuestionElement) {
-        nextQuestionElement.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center' // Centers the question in the viewport
-        });
+    // Update local state
+    setBatchAnswers(prev => ({ ...prev, [questionId]: value }));
+    
+    // ALSO update global state immediately
+    const immediateAnswer = { [questionId]: value };
+    recordBatchAnswers(immediateAnswer);
+    
+    // IMPROVED AUTO-SCROLL LOGIC - Less aggressive for mobile
+    setTimeout(() => {
+      const currentQuestionIndex = questions.findIndex(q => q.id === questionId);
+      const nextQuestionIndex = currentQuestionIndex + 1;
+      
+      // If there's a next question in this batch, scroll to it
+      if (nextQuestionIndex < questions.length) {
+        const nextQuestionElement = document.getElementById(`question-${questions[nextQuestionIndex].id}`);
+        if (nextQuestionElement) {
+          // Check if we're on mobile
+          const isMobile = window.innerWidth < 768;
+          if (isMobile) {
+            // More gentle scroll for mobile - just scroll into view without centering
+            nextQuestionElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center' // Less aggressive than 'center'
+            });
+          } else {
+            // Desktop can handle center scrolling
+            nextQuestionElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center'
+            });
+          }
+        }
+      } else {
+        // If this was the last question, gently scroll to continue button
+        const continueButton = document.getElementById('continue-button');
+        if (continueButton) {
+          continueButton.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'nearest' // Less aggressive scroll
+          });
+        }
       }
-    } else {
-      // If this was the last question, scroll to the continue button
-      const continueButton = document.getElementById('continue-button');
-      if (continueButton) {
-        continueButton.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center' 
-        });
-      }
-    }
-  }, 200); // Small delay to let the UI update first
-};
+    }, 200); // Slightly faster response
+  };
   
   const toggleExplanation = (questionId) => {
     setShowExplanations(prev => ({
@@ -92,7 +103,12 @@ export default function QuestionBatch() {
     // Check if all questions are answered
     const unansweredQuestions = questions.filter(q => allAnswers[q.id] === undefined);
     if (unansweredQuestions.length > 0) {
-      // Could show an error message here
+      // Scroll to first unanswered question - gentle scroll
+      const firstUnanswered = unansweredQuestions[0];
+      const element = document.getElementById(`question-${firstUnanswered.id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
       return;
     }
     
@@ -135,64 +151,64 @@ export default function QuestionBatch() {
 
   return (
     <div className="max-w-5xl w-full mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-blue-100">
-      <div className="p-8">
+      <div className="p-4 sm:p-6 lg:p-8">
 
         <ProgressBar 
           current={progress.current} 
           total={progress.total}
-          className="mb-6"
+          className="mb-4 sm:mb-6"
         />
-                  {/* Change Category Button - Centered */}
-          <div className="flex justify-center mb-4">
-            <div className="relative">
-              <button
-                onClick={() => setShowCategoryConfirm(!showCategoryConfirm)}
-                className="flex items-center px-4 py-2 bg-blue-50 text-blue-700 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors duration-200 text-sm font-medium"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                </svg>
-                Change Category
-              </button>
-              
-              {/* Confirmation Dialog */}
-              {showCategoryConfirm && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 top-12 bg-white rounded-lg shadow-lg border border-blue-200 p-4 w-80 z-10">
-                  <h4 className="font-medium text-blue-800 mb-2">Change Course Category?</h4>
-                  <p className="text-sm text-blue-600 mb-4">
-                    This will reset your current progress and take you back to choose a different course category.
-                  </p>
-                  <div className="flex justify-end space-x-3">
-                    <button
-                      onClick={() => setShowCategoryConfirm(false)}
-                      className="px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleCategoryChange}
-                      className="px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                    >
-                      Change Category
-                    </button>
-                  </div>
+
+        {/* Change Category Button - Mobile Optimized */}
+        <div className="flex justify-center mb-4">
+          <div className="relative">
+            <button
+              onClick={() => setShowCategoryConfirm(!showCategoryConfirm)}
+              className="flex items-center px-3 sm:px-4 py-2 bg-blue-50 text-blue-700 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors duration-200 text-sm font-medium"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+              <span className="hidden sm:inline">Change Category</span>
+              <span className="sm:hidden">Change</span>
+            </button>
+            
+            {/* Confirmation Dialog */}
+            {showCategoryConfirm && (
+              <div className="absolute left-1/2 transform -translate-x-1/2 top-12 bg-white rounded-lg shadow-lg border border-blue-200 p-4 w-72 sm:w-80 z-10 mx-4">
+                <h4 className="font-medium text-blue-800 mb-2 text-sm sm:text-base">Change Course Category?</h4>
+                <p className="text-xs sm:text-sm text-blue-600 mb-4">
+                  This will reset your current progress and take you back to choose a different course category.
+                </p>
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => setShowCategoryConfirm(false)}
+                    className="px-3 py-2 text-xs sm:text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCategoryChange}
+                    className="px-3 py-2 text-xs sm:text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                  >
+                    Change Category
+                  </button>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
+        </div>
           
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-semibold text-blue-800 mb-2">
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl font-semibold text-blue-800 mb-2">
             {getBatchTitle()}
           </h2>
-          <p className="text-blue-600 mb-4">
+          <p className="text-sm sm:text-base text-blue-600 mb-4">
             Answer all questions below, then click Continue
           </p>
-          
-
         </div>
         
-        <div className="space-y-6 mb-8">
+        <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
           {questions.map((question, index) => {
             const allAnswers = getCurrentAnswers();
             const currentAnswer = allAnswers[question.id];
@@ -201,17 +217,17 @@ export default function QuestionBatch() {
               <div 
                 key={question.id} 
                 id={`question-${question.id}`}
-                className="border border-blue-100 rounded-xl p-6 bg-blue-50/30"
+                className="border border-blue-100 rounded-xl p-4 sm:p-6 bg-blue-50/30"
               >
                 <div className="mb-4">
-                  <h3 className="text-lg font-medium text-blue-800 mb-4">
+                  <h3 className="text-base sm:text-lg font-medium text-blue-800 mb-4 leading-relaxed">
                     {index + 1}. {question.text}
                   </h3>
                   
-                  <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:gap-3">
                     <Button
                       variant={currentAnswer === true ? 'primary' : 'outline'}
-                      className="flex-1 py-3 text-base"
+                      className="flex-1 py-3 sm:py-3 text-base font-medium min-h-[48px]"
                       onClick={() => handleAnswer(question.id, true)}
                     >
                       <span className="flex items-center justify-center">
@@ -231,7 +247,7 @@ export default function QuestionBatch() {
                     
                     <Button
                       variant={currentAnswer === false ? 'primary' : 'outline'}
-                      className="flex-1 py-3 text-base"
+                      className="flex-1 py-3 sm:py-3 text-base font-medium min-h-[48px]"
                       onClick={() => handleAnswer(question.id, false)}
                     >
                       <span className="flex items-center justify-center">
@@ -255,7 +271,7 @@ export default function QuestionBatch() {
                   <div className="mt-4">
                     <button
                       onClick={() => toggleExplanation(question.id)}
-                      className="text-blue-600 text-sm font-medium flex items-center hover:translate-x-1 transition-transform duration-150"
+                      className="text-blue-600 text-sm font-medium flex items-center hover:translate-x-1 transition-transform duration-150 min-h-[44px]"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -284,25 +300,26 @@ export default function QuestionBatch() {
           })}
         </div>
         
-        <div className="flex justify-between items-center pt-6 border-t border-blue-100">
+        {/* FIXED BUTTON ALIGNMENT - Both buttons now have exact same styling */}
+        <div className="flex flex-col sm:flex-row justify-between items-center pt-6 border-t border-blue-100 space-y-4 sm:space-y-0 sm:gap-4">
           <Button 
             variant="secondary" 
             onClick={prevStage}
-            className="px-6 py-3"
+            className="w-full sm:flex-1 px-8 py-3 min-h-[48px]"
           >
             Back
           </Button>
           
-          <div className="flex items-center">
+          <div className="w-full sm:flex-1 flex flex-col items-center space-y-3 sm:space-y-0">
             {!allAnswered() && (
-              <span className="text-sm text-blue-600 mr-4">
+              <span className="text-xs sm:text-sm text-blue-600 text-center">
                 Please answer all questions to continue
               </span>
             )}
             <Button 
               onClick={handleNext}
               disabled={!allAnswered()}
-              className={`px-8 py-3 ${allAnswered() ? 'shadow-lg shadow-blue-500/20' : ''}`}
+              className={`w-full px-8 py-3 min-h-[48px] ${allAnswered() ? 'shadow-lg shadow-blue-500/20' : ''}`}
               id="continue-button"
             >
               {progress.current === progress.total ? 'See Results' : 'Continue'}

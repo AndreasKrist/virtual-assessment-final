@@ -29,8 +29,8 @@ const itemVariants = {
 const PrimaryButton = ({ children, onClick, className = '', disabled = false }) => {
   return (
     <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       className={`btn btn-primary ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : 'pulse'}`}
       onClick={onClick}
       disabled={disabled}
@@ -89,25 +89,27 @@ export default function Home() {
       <Head>
         <title>Prelim Tech Skills Assessor</title>
         <meta name="description" content="Discover your potential IT career path and get personalized course recommendations." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/images/itel-logo.png" />
       </Head>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-6 sm:py-12">
         <motion.div 
           className="max-w-4xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 sm:mb-12">
             <motion.h1 
-              className="text-5xl md:text-5xl font-bold mb-4 text-blue-900 relative"
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-blue-900 relative px-2"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.7 }}
             >
               <span className="relative inline-block">
-                Prelim Tech Skills Assessor [PTSA]
+                <span className="block sm:inline">Prelim Tech Skills</span>
+                <span className="block sm:inline"> Assessor [PTSA]</span>
                 <motion.span 
                   className="absolute -bottom-2 left-0 w-full h-1 bg-blue-500"
                   initial={{ width: 0 }}
@@ -118,7 +120,7 @@ export default function Home() {
             </motion.h1>
             
             <motion.p 
-              className="text-xl text-blue-700"
+              className="text-lg sm:text-xl text-blue-700 px-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.7 }}
@@ -133,28 +135,28 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
           >
-            <div className="p-8">
+            <div className="p-6 sm:p-8">
               {/* Welcome Section */}
               <motion.div 
-                className="text-center mb-8"
+                className="text-center mb-6 sm:mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8, duration: 0.5 }}
               >
-                <h2 className="text-2xl font-semibold mb-4 text-blue-900">
+                <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-blue-900">
                   Welcome to ITEL&apos;s Prelim Tech Skills Assessor [PTSA]! 👋
                 </h2>
-                <p className="text-lg text-blue-700 mb-4">
+                <p className="text-base sm:text-lg text-blue-700 mb-4">
                   This assessment helps you discover your potential in Tech and provides personalized course recommendations to boost your career.
                 </p>
-                <p className="text-blue-600">
+                <p className="text-sm sm:text-base text-blue-600">
                   Whether you&apos;re just starting out or looking to advance your skills, we&apos;ll guide you toward the right learning path based on your current knowledge and discipline.
                 </p>
               </motion.div>
 
               {/* Collapsible How It Works Section */}
               <motion.div 
-                className="mb-8"
+                className="mb-6 sm:mb-8"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 0.5 }}
@@ -162,7 +164,7 @@ export default function Home() {
                 <div className="text-center mb-4">
                   <button
                     onClick={() => setShowHowItWorks(!showHowItWorks)}
-                    className="inline-flex items-center px-6 py-3 bg-blue-50 text-blue-700 rounded-xl border border-blue-200 hover:bg-blue-100 transition-all duration-200 font-medium"
+                    className="inline-flex items-center px-4 sm:px-6 py-3 bg-blue-50 text-blue-700 rounded-xl border border-blue-200 hover:bg-blue-100 transition-all duration-200 font-medium text-sm sm:text-base"
                   >
                     <span className="mr-2">How It Works</span>
                     <motion.svg
@@ -188,67 +190,62 @@ export default function Home() {
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                   className="overflow-hidden"
                 >
-                  <div className="bg-blue-gradient rounded-xl p-8">
+                  <div className="bg-blue-gradient rounded-xl p-4 sm:p-8">
                     <motion.div 
-                      className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                      className="space-y-6"
                       variants={containerVariants}
                       initial="hidden"
                       animate={showHowItWorks ? "visible" : "hidden"}
                     >
-                      <div>
-                        <ol className="space-y-6">
-                          <motion.li variants={itemVariants} className="flex">
-                            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-medium text-lg mr-4">
-                              1
-                            </div>
-                            <div className="mt-1">
-                              <h3 className="font-semibold text-lg text-blue-800">Tell Us About Yourself</h3>
-                              <p className="text-blue-700 text-sm mt-1">
-                                Enter your basic information to get started
-                              </p>
-                            </div>
-                          </motion.li>
-                          
-                          <motion.li variants={itemVariants} className="flex">
-                            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-medium text-lg mr-4">
-                              2
-                            </div>
-                            <div className="mt-1">
-                              <h3 className="font-semibold text-lg text-blue-800">Choose Your Area of Discipline</h3>
-                              <p className="text-blue-700 text-sm mt-1">
-                                Select between Network Administration or Cybersecurity
-                              </p>
-                            </div>
-                          </motion.li>
-                        </ol>
-                      </div>
-                      
-                      <div>
-                        <ol className="space-y-6" start="3">
-                          <motion.li variants={itemVariants} className="flex">
-                            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-medium text-lg mr-4">
-                              3
-                            </div>
-                            <div className="mt-1">
-                              <h3 className="font-semibold text-lg text-blue-800">Answer Simple Questions</h3>
-                              <p className="text-blue-700 text-sm mt-1">
-                                Answer yes/no questions about your current knowledge
-                              </p>
-                            </div>
-                          </motion.li>
-                          
-                          <motion.li variants={itemVariants} className="flex">
-                            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-medium text-lg mr-4">
-                              4
-                            </div>
-                            <div className="mt-1">
-                              <h3 className="font-semibold text-lg text-blue-800">Get Your Summary</h3>
-                              <p className="text-blue-700 text-sm mt-1">
-                                Receive your summary of skills analysis
-                              </p>
-                            </div>
-                          </motion.li>
-                        </ol>
+                      {/* Mobile-optimized steps layout */}
+                      <div className="space-y-6">
+                        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row">
+                          <div className="flex-shrink-0 h-12 w-12 sm:h-10 sm:w-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-medium text-lg mr-0 sm:mr-4 mb-3 sm:mb-0 mx-auto sm:mx-0">
+                            1
+                          </div>
+                          <div className="text-center sm:text-left sm:mt-1">
+                            <h3 className="font-semibold text-lg text-blue-800">Tell Us About Yourself</h3>
+                            <p className="text-blue-700 text-sm mt-1">
+                              Enter your basic information to get started
+                            </p>
+                          </div>
+                        </motion.div>
+                        
+                        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row">
+                          <div className="flex-shrink-0 h-12 w-12 sm:h-10 sm:w-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-medium text-lg mr-0 sm:mr-4 mb-3 sm:mb-0 mx-auto sm:mx-0">
+                            2
+                          </div>
+                          <div className="text-center sm:text-left sm:mt-1">
+                            <h3 className="font-semibold text-lg text-blue-800">Choose Your Area of Discipline</h3>
+                            <p className="text-blue-700 text-sm mt-1">
+                              Select between Network Administration or Cybersecurity
+                            </p>
+                          </div>
+                        </motion.div>
+                        
+                        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row">
+                          <div className="flex-shrink-0 h-12 w-12 sm:h-10 sm:w-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-medium text-lg mr-0 sm:mr-4 mb-3 sm:mb-0 mx-auto sm:mx-0">
+                            3
+                          </div>
+                          <div className="text-center sm:text-left sm:mt-1">
+                            <h3 className="font-semibold text-lg text-blue-800">Answer Simple Questions</h3>
+                            <p className="text-blue-700 text-sm mt-1">
+                              Answer yes/no questions about your current knowledge
+                            </p>
+                          </div>
+                        </motion.div>
+                        
+                        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row">
+                          <div className="flex-shrink-0 h-12 w-12 sm:h-10 sm:w-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-medium text-lg mr-0 sm:mr-4 mb-3 sm:mb-0 mx-auto sm:mx-0">
+                            4
+                          </div>
+                          <div className="text-center sm:text-left sm:mt-1">
+                            <h3 className="font-semibold text-lg text-blue-800">Get Your Summary</h3>
+                            <p className="text-blue-700 text-sm mt-1">
+                              Receive your summary of skills analysis
+                            </p>
+                          </div>
+                        </motion.div>
                       </div>
                     </motion.div>
                   </div>
@@ -263,13 +260,13 @@ export default function Home() {
               >
                 <PrimaryButton 
                   onClick={handleStartAssessment}
-                  className="px-12 py-5 text-xl"
+                  className="w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 text-lg sm:text-xl"
                 >
                   Start Assessment
                 </PrimaryButton>
                 
                 <motion.p 
-                  className="mt-4 text-base text-blue-600"
+                  className="mt-4 text-sm sm:text-base text-blue-600"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.4, duration: 0.5 }}
