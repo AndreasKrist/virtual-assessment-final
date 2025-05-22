@@ -43,37 +43,41 @@ export default function QuestionBatch() {
   };
   
   const handleAnswer = (questionId, value) => {
-    setBatchAnswers(prev => ({
-      ...prev,
-      [questionId]: value
-    }));
+  console.log('Direct answer update:', questionId, value);
+  
+  // Update local state
+  setBatchAnswers(prev => ({ ...prev, [questionId]: value }));
+  
+  // ALSO update global state immediately
+  const immediateAnswer = { [questionId]: value };
+  recordBatchAnswers(immediateAnswer);
+  
+  // AUTO-SCROLL LOGIC (this is what you're missing!)
+  setTimeout(() => {
+    const currentQuestionIndex = questions.findIndex(q => q.id === questionId);
+    const nextQuestionIndex = currentQuestionIndex + 1;
     
-    // Auto-scroll to next question after a short delay
-    setTimeout(() => {
-      const currentQuestionIndex = questions.findIndex(q => q.id === questionId);
-      const nextQuestionIndex = currentQuestionIndex + 1;
-      
-      // If there's a next question in this batch, scroll to it
-      if (nextQuestionIndex < questions.length) {
-        const nextQuestionElement = document.getElementById(`question-${questions[nextQuestionIndex].id}`);
-        if (nextQuestionElement) {
-          nextQuestionElement.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center' // Centers the question in the viewport
-          });
-        }
-      } else {
-        // If this was the last question, scroll to the continue button
-        const continueButton = document.getElementById('continue-button');
-        if (continueButton) {
-          continueButton.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center' 
-          });
-        }
+    // If there's a next question in this batch, scroll to it
+    if (nextQuestionIndex < questions.length) {
+      const nextQuestionElement = document.getElementById(`question-${questions[nextQuestionIndex].id}`);
+      if (nextQuestionElement) {
+        nextQuestionElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' // Centers the question in the viewport
+        });
       }
-    }, 200); // Small delay to let the UI update first
-  };
+    } else {
+      // If this was the last question, scroll to the continue button
+      const continueButton = document.getElementById('continue-button');
+      if (continueButton) {
+        continueButton.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }
+    }
+  }, 200); // Small delay to let the UI update first
+};
   
   const toggleExplanation = (questionId) => {
     setShowExplanations(prev => ({
