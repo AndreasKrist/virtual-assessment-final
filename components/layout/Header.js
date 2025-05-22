@@ -6,6 +6,8 @@ import { useAssessment } from '../../contexts/AssessmentContext';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const { stage, resetAssessment } = useAssessment();
+  const router = useRouter();
   
   // Handle scroll effect
   useEffect(() => {
@@ -23,6 +25,15 @@ export default function Header() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  // Handle start over
+  const handleStartOver = () => {
+    resetAssessment();
+    router.push('/');
+  };
+
+  // Check if we should show the start over button
+  const showStartOver = router.pathname === '/assessment' && stage !== 'welcome';
 
   return (
     <header className={`sticky top-0 z-50 backdrop-blur-sm transition-all duration-300 ${
@@ -56,13 +67,25 @@ export default function Header() {
         </Link>
 
         <nav>
-          <ul className="flex space-x-6">
+          <ul className="flex space-x-6 items-center">
             <li>
               <NavLink href="/" label="Home" />
             </li>
             <li>
               <NavLink href="/assessment" label="Start Assessment" />
             </li>
+            {showStartOver && (
+              <li>
+                <motion.button
+                  onClick={handleStartOver}
+                  className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 hover:border-blue-300 transition-colors duration-200"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  🔄 Start Over
+                </motion.button>
+              </li>
+            )}
           </ul>
         </nav>
       </div>
@@ -73,13 +96,13 @@ export default function Header() {
 // NavLink component with animations
 function NavLink({ href, label }) {
   const router = useRouter();
-  const { nextStage } = useAssessment();
+  const { startAssessment } = useAssessment();
   const isActive = router.pathname === href;
   
   const handleClick = (e) => {
     if (href === '/assessment' && router.pathname !== '/assessment') {
       e.preventDefault();
-      nextStage();
+      startAssessment();
       router.push(href);
     }
   };

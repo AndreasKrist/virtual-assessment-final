@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { generalQuestions, roleQuestions, courseCatalog } from '../data/questions';
 
 const AssessmentContext = createContext();
@@ -19,8 +19,8 @@ export function AssessmentProvider({ children }) {
   // Selected role
   const [selectedRole, setSelectedRole] = useState(null);
 
-  // Current assessment stage
-  const [stage, setStage] = useState('welcome'); // welcome, biodata, roleSelection, generalQuestions, roleQuestions, results
+  // Current assessment stage - always start from welcome
+  const [stage, setStage] = useState('welcome');
 
   // Current question index
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -42,6 +42,16 @@ export function AssessmentProvider({ children }) {
     weaknesses: []
   });
 
+  // Initialize with clean state - but don't cause re-renders
+  const [isInitialized, setIsInitialized] = useState(false);
+  
+  useEffect(() => {
+    // Only initialize once when the app first loads
+    if (!isInitialized) {
+      setIsInitialized(true);
+    }
+  }, [isInitialized]);
+
   // Set biodata information
   const updateBiodata = (data) => {
     setBiodata({ ...biodata, ...data });
@@ -50,6 +60,14 @@ export function AssessmentProvider({ children }) {
   // Select role
   const selectRole = (role) => {
     setSelectedRole(role);
+  };
+
+  // Start assessment - always ensure we start from biodata
+  const startAssessment = () => {
+    // Reset everything first
+    resetAssessment();
+    // Then move to biodata stage
+    setStage('biodata');
   };
 
   // Move to the next stage
@@ -236,7 +254,7 @@ export function AssessmentProvider({ children }) {
     });
   };
 
-  // Reset the assessment
+  // Reset the assessment to initial state
   const resetAssessment = () => {
     setBiodata({
       fullName: '',
@@ -260,6 +278,28 @@ export function AssessmentProvider({ children }) {
     });
   };
 
+  // Check if assessment should be reset (for safety)
+  const shouldResetAssessment = () => {
+    // If we're in a state that doesn't make sense, reset
+    if (stage === 'roleSelection' && !biodata.fullName) {
+      return true;
+    }
+    if ((stage === 'generalQuestions' || stage === 'roleQuestions') && !selectedRole) {
+      return true;
+    }
+    return false;
+  };
+
+  // Safety check function
+  const safeNextStage = () => {
+    if (shouldResetAssessment()) {
+      resetAssessment();
+      setStage('biodata');
+    } else {
+      nextStage();
+    }
+  };
+
   // Value object to be provided to context consumers
   const value = {
     biodata,
@@ -271,10 +311,11 @@ export function AssessmentProvider({ children }) {
     currentQuestionSet,
     answers,
     results,
-    nextStage,
+    nextStage: nextStage,
     prevStage,
     recordAnswer,
     resetAssessment,
+    startAssessment, // New function specifically for starting assessment
     getCurrentQuestion: () => {
       if (currentQuestionSet === 'general') {
         return generalQuestions[currentQuestionIndex];

@@ -1,9 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useAssessment } from '../../contexts/AssessmentContext';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const router = useRouter();
+  const { startAssessment } = useAssessment();
+  
+  // Handle assessment link click
+  const handleAssessmentClick = (e) => {
+    if (router.pathname !== '/assessment') {
+      e.preventDefault();
+      startAssessment();
+      router.push('/assessment');
+    }
+  };
   
   return (
     <footer className="py-8 relative mt-20 bg-blue-900">
@@ -42,7 +55,12 @@ export default function Footer() {
                   whileHover={{ x: 3 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <Link href="/assessment" className="text-blue-100 hover:text-white text-sm transition-colors duration-200">Start Assessment</Link>
+                  <button
+                    onClick={handleAssessmentClick}
+                    className="text-blue-100 hover:text-white text-sm transition-colors duration-200 text-left"
+                  >
+                    Start Assessment
+                  </button>
                 </motion.li>
                 <motion.li 
                   whileHover={{ x: 3 }}

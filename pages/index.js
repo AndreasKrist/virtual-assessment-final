@@ -42,11 +42,12 @@ const PrimaryButton = ({ children, onClick, className = '', disabled = false }) 
 
 export default function Home() {
   const router = useRouter();
-  const { nextStage } = useAssessment();
+  const { startAssessment } = useAssessment();
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   
   const handleStartAssessment = () => {
-    nextStage();
+    // This ensures a clean start every time
+    startAssessment();
     router.push('/assessment');
   };
 
@@ -144,7 +145,7 @@ export default function Home() {
                   Welcome to Prelim Tech Skills Assessor! 👋
                 </h2>
                 <p className="text-lg text-blue-700 mb-4">
-                  This assessment helps you discover your potential in Tech  and provides personalized course recommendations to boost your career.
+                  This assessment helps you discover your potential in Tech and provides personalized course recommendations to boost your career.
                 </p>
                 <p className="text-blue-600">
                   Whether you&apos;re just starting out or looking to advance your skills, we&apos;ll guide you toward the right learning path based on your current knowledge and discipline.
@@ -201,9 +202,9 @@ export default function Home() {
                               1
                             </div>
                             <div className="mt-1">
-                              <h3 className="font-semibold text-lg text-blue-800">Choose Your Area of Discipline</h3>
+                              <h3 className="font-semibold text-lg text-blue-800">Tell Us About Yourself</h3>
                               <p className="text-blue-700 text-sm mt-1">
-                                Select between Network Administration or Cybersecurity
+                                Enter your basic information to get started
                               </p>
                             </div>
                           </motion.li>
@@ -213,9 +214,9 @@ export default function Home() {
                               2
                             </div>
                             <div className="mt-1">
-                              <h3 className="font-semibold text-lg text-blue-800">Answer Simple Questions</h3>
+                              <h3 className="font-semibold text-lg text-blue-800">Choose Your Area of Discipline</h3>
                               <p className="text-blue-700 text-sm mt-1">
-                                Answer yes/no questions about your current knowledge
+                                Select between Network Administration or Cybersecurity
                               </p>
                             </div>
                           </motion.li>
@@ -229,9 +230,9 @@ export default function Home() {
                               3
                             </div>
                             <div className="mt-1">
-                              <h3 className="font-semibold text-lg text-blue-800">Get Your Success Rate</h3>
+                              <h3 className="font-semibold text-lg text-blue-800">Answer Simple Questions</h3>
                               <p className="text-blue-700 text-sm mt-1">
-                                See your estimated success rate in your chosen path
+                                Answer yes/no questions about your current knowledge
                               </p>
                             </div>
                           </motion.li>
@@ -241,9 +242,9 @@ export default function Home() {
                               4
                             </div>
                             <div className="mt-1">
-                              <h3 className="font-semibold text-lg text-blue-800">Receive Course Recommendations</h3>
+                              <h3 className="font-semibold text-lg text-blue-800">Get Your Results</h3>
                               <p className="text-blue-700 text-sm mt-1">
-                                Get personalized course suggestions to improve your skills
+                                Receive your success rate and personalized course recommendations
                               </p>
                             </div>
                           </motion.li>
