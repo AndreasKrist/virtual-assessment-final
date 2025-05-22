@@ -19,11 +19,11 @@ export function AssessmentProvider({ children }) {
   // Selected role
   const [selectedRole, setSelectedRole] = useState(null);
 
-  // Current assessment stage - always start from welcome
+  // Current assessment stage
   const [stage, setStage] = useState('welcome');
 
-  // Current question index
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  // Current batch index (0 or 1 for each question set)
+  const [currentBatch, setCurrentBatch] = useState(0);
 
   // Question set being used (general or role-specific)
   const [currentQuestionSet, setCurrentQuestionSet] = useState('general');
@@ -42,11 +42,10 @@ export function AssessmentProvider({ children }) {
     weaknesses: []
   });
 
-  // Initialize with clean state - but don't cause re-renders
+  // Initialize with clean state
   const [isInitialized, setIsInitialized] = useState(false);
   
   useEffect(() => {
-    // Only initialize once when the app first loads
     if (!isInitialized) {
       setIsInitialized(true);
     }
@@ -62,12 +61,66 @@ export function AssessmentProvider({ children }) {
     setSelectedRole(role);
   };
 
-  // Start assessment - always ensure we start from biodata
+  // Switch role during assessment (keeps biodata, resets questions)
+  const switchRole = (newRole) => {
+    setSelectedRole(newRole);
+    // Reset answers and go back to general questions
+    setAnswers({
+      general: {},
+      roleSpecific: {}
+    });
+    setStage('generalQuestions');
+    setCurrentQuestionSet('general');
+    setCurrentBatch(0);
+  };
+
+  // Go back to role selection (keeps biodata, resets questions)
+  const goBackToRoleSelection = () => {
+    setAnswers({
+      general: {},
+      roleSpecific: {}
+    });
+    setStage('roleSelection');
+    setCurrentQuestionSet('general');
+    setCurrentBatch(0);
+  };
+
+  // Start assessment
   const startAssessment = () => {
-    // Reset everything first
     resetAssessment();
-    // Then move to biodata stage
     setStage('biodata');
+  };
+
+  // Get current batch of questions (5 questions at a time)
+  const getCurrentBatch = () => {
+    const questions = currentQuestionSet === 'general' 
+      ? generalQuestions 
+      : roleQuestions[selectedRole];
+    
+    const startIndex = currentBatch * 5;
+    const endIndex = startIndex + 5;
+    return questions.slice(startIndex, endIndex);
+  };
+
+  // Record answers for a batch of questions
+  const recordBatchAnswers = (batchAnswers) => {
+    if (currentQuestionSet === 'general') {
+      setAnswers({
+        ...answers,
+        general: {
+          ...answers.general,
+          ...batchAnswers
+        }
+      });
+    } else {
+      setAnswers({
+        ...answers,
+        roleSpecific: {
+          ...answers.roleSpecific,
+          ...batchAnswers
+        }
+      });
+    }
   };
 
   // Move to the next stage
@@ -82,22 +135,25 @@ export function AssessmentProvider({ children }) {
       case 'roleSelection':
         setStage('generalQuestions');
         setCurrentQuestionSet('general');
-        setCurrentQuestionIndex(0);
+        setCurrentBatch(0);
         break;
       case 'generalQuestions':
-        if (currentQuestionIndex < generalQuestions.length - 1) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1);
+        if (currentBatch === 0) {
+          // Move to second batch of general questions
+          setCurrentBatch(1);
         } else {
+          // Move to role-specific questions
           setStage('roleQuestions');
           setCurrentQuestionSet('roleSpecific');
-          setCurrentQuestionIndex(0);
+          setCurrentBatch(0);
         }
         break;
       case 'roleQuestions':
-        const roleQuestionsArray = roleQuestions[selectedRole];
-        if (currentQuestionIndex < roleQuestionsArray.length - 1) {
-          setCurrentQuestionIndex(currentQuestionIndex + 1);
+        if (currentBatch === 0) {
+          // Move to second batch of role questions
+          setCurrentBatch(1);
         } else {
+          // Calculate results and move to results
           calculateResults();
           setStage('results');
         }
@@ -107,7 +163,7 @@ export function AssessmentProvider({ children }) {
     }
   };
 
-  // Go back to previous stage or question
+  // Go back to previous stage
   const prevStage = () => {
     switch (stage) {
       case 'biodata':
@@ -117,44 +173,27 @@ export function AssessmentProvider({ children }) {
         setStage('biodata');
         break;
       case 'generalQuestions':
-        if (currentQuestionIndex > 0) {
-          setCurrentQuestionIndex(currentQuestionIndex - 1);
+        if (currentBatch === 1) {
+          // Go back to first batch of general questions
+          setCurrentBatch(0);
         } else {
+          // Go back to role selection
           setStage('roleSelection');
         }
         break;
       case 'roleQuestions':
-        if (currentQuestionIndex > 0) {
-          setCurrentQuestionIndex(currentQuestionIndex - 1);
+        if (currentBatch === 1) {
+          // Go back to first batch of role questions
+          setCurrentBatch(0);
         } else {
+          // Go back to general questions (second batch)
           setStage('generalQuestions');
           setCurrentQuestionSet('general');
-          setCurrentQuestionIndex(generalQuestions.length - 1);
+          setCurrentBatch(1);
         }
         break;
       default:
         break;
-    }
-  };
-
-  // Record an answer
-  const recordAnswer = (questionId, answer) => {
-    if (currentQuestionSet === 'general') {
-      setAnswers({
-        ...answers,
-        general: {
-          ...answers.general,
-          [questionId]: answer
-        }
-      });
-    } else {
-      setAnswers({
-        ...answers,
-        roleSpecific: {
-          ...answers.roleSpecific,
-          [questionId]: answer
-        }
-      });
     }
   };
 
@@ -164,22 +203,18 @@ export function AssessmentProvider({ children }) {
     const generalYesCount = Object.values(answers.general).filter(answer => answer === true).length;
     const roleYesCount = Object.values(answers.roleSpecific).filter(answer => answer === true).length;
     
-    // Calculate success rate
-    // Role-specific questions are weighted higher (60% vs 40%)
-    const generalWeight = 0.4; // General questions are 40% of the score
-    const roleWeight = 0.6;    // Role questions are 60% of the score
+    // Calculate success rate with weighting
+    const generalWeight = 0.4;
+    const roleWeight = 0.6;
     
     const generalScore = generalYesCount / generalQuestions.length;
     const roleScore = roleYesCount / roleQuestions[selectedRole].length;
     
     // Apply curve to the scores with a minimum base of 55%
     const curveScore = (score) => {
-      // Minimum score of 55% that scales up based on correct answers
       if (score <= 0.5) {
-        // Start at 55% (when score is 0) and scale up to 75% (when score is 0.5)
         return 0.55 + (score * 0.4); 
       } else {
-        // Linear interpolation between (0.5, 0.75) and (0.8, 0.9)
         return 0.75 + (score - 0.5) * (0.15 / 0.3);
       }
     };
@@ -188,15 +223,11 @@ export function AssessmentProvider({ children }) {
     const curvedRoleScore = curveScore(roleScore);
     
     const weightedScore = (curvedGeneralScore * generalWeight) + (curvedRoleScore * roleWeight);
-    
-    // Ensure minimum score of 55%
     const finalSuccessRate = Math.max(55, Math.round(weightedScore * 100));
     
     // Identify strengths and weaknesses
     const strengths = [];
     const weaknesses = [];
-    
-    // Get course recommendations based on 'no' answers
     const recommendations = [];
     
     // Check general questions
@@ -231,9 +262,8 @@ export function AssessmentProvider({ children }) {
       }
     });
     
-    // Sort recommendations by priority (start with role-specific ones)
+    // Sort and limit recommendations
     recommendations.sort((a, b) => {
-      // Role-specific recommendations come first
       const aIsRoleSpecific = a.questionId.includes(selectedRole === 'networkAdmin' ? 'network' : 'cyber');
       const bIsRoleSpecific = b.questionId.includes(selectedRole === 'networkAdmin' ? 'network' : 'cyber');
       
@@ -242,10 +272,8 @@ export function AssessmentProvider({ children }) {
       return 0;
     });
     
-    // Limit to top 5 recommendations
     const topRecommendations = recommendations.slice(0, 5);
     
-    // Update results
     setResults({
       successRate: finalSuccessRate,
       recommendations: topRecommendations,
@@ -264,7 +292,7 @@ export function AssessmentProvider({ children }) {
     });
     setSelectedRole(null);
     setStage('welcome');
-    setCurrentQuestionIndex(0);
+    setCurrentBatch(0);
     setCurrentQuestionSet('general');
     setAnswers({
       general: {},
@@ -278,26 +306,33 @@ export function AssessmentProvider({ children }) {
     });
   };
 
-  // Check if assessment should be reset (for safety)
-  const shouldResetAssessment = () => {
-    // If we're in a state that doesn't make sense, reset
-    if (stage === 'roleSelection' && !biodata.fullName) {
-      return true;
+  // Get batch progress information
+  const getBatchProgress = () => {
+    let totalBatches = 4; // 2 general + 2 role-specific
+    let completedBatches = 0;
+    
+    if (stage === 'generalQuestions') {
+      completedBatches = currentBatch;
+    } else if (stage === 'roleQuestions') {
+      completedBatches = 2 + currentBatch;
+    } else if (stage === 'results') {
+      completedBatches = 4;
     }
-    if ((stage === 'generalQuestions' || stage === 'roleQuestions') && !selectedRole) {
-      return true;
-    }
-    return false;
+    
+    return { 
+      current: completedBatches + 1,
+      total: totalBatches,
+      percentage: Math.round(((completedBatches + 1) / totalBatches) * 100)
+    };
   };
 
-  // Safety check function
-  const safeNextStage = () => {
-    if (shouldResetAssessment()) {
-      resetAssessment();
-      setStage('biodata');
-    } else {
-      nextStage();
-    }
+  // Get role name for display
+  const getRoleName = () => {
+    const roleNames = {
+      networkAdmin: "Network Administration",
+      cybersecurity: "Cybersecurity"
+    };
+    return roleNames[selectedRole] || '';
   };
 
   // Value object to be provided to context consumers
@@ -307,42 +342,33 @@ export function AssessmentProvider({ children }) {
     selectedRole,
     selectRole,
     stage,
-    currentQuestionIndex,
+    currentBatch,
     currentQuestionSet,
     answers,
     results,
-    nextStage: nextStage,
+    nextStage,
     prevStage,
-    recordAnswer,
+    recordBatchAnswers,
     resetAssessment,
-    startAssessment, // New function specifically for starting assessment
+    startAssessment,
+    switchRole,
+    goBackToRoleSelection,
+    getCurrentBatch,
+    getBatchProgress,
+    getRoleName,
+    // Keep these for backward compatibility with existing components
     getCurrentQuestion: () => {
-      if (currentQuestionSet === 'general') {
-        return generalQuestions[currentQuestionIndex];
-      } else {
-        return roleQuestions[selectedRole][currentQuestionIndex];
-      }
+      // This is mainly for the old QuestionCard component if still used
+      const batch = getCurrentBatch();
+      return batch[0] || null;
+    },
+    recordAnswer: (questionId, answer) => {
+      // For backward compatibility
+      recordBatchAnswers({ [questionId]: answer });
     },
     getProgress: () => {
-      let totalQuestions = generalQuestions.length;
-      if (selectedRole) {
-        totalQuestions += roleQuestions[selectedRole].length;
-      }
-      
-      let completedQuestions = 0;
-      if (stage === 'generalQuestions') {
-        completedQuestions = currentQuestionIndex;
-      } else if (stage === 'roleQuestions') {
-        completedQuestions = generalQuestions.length + currentQuestionIndex;
-      } else if (stage === 'results') {
-        completedQuestions = totalQuestions;
-      }
-      
-      return { 
-        current: completedQuestions,
-        total: totalQuestions,
-        percentage: Math.round((completedQuestions / totalQuestions) * 100)
-      };
+      // For backward compatibility, but using batch progress
+      return getBatchProgress();
     }
   };
 

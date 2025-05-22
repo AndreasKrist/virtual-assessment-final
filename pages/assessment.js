@@ -5,7 +5,7 @@ import { useAssessment } from '../contexts/AssessmentContext';
 import Layout from '../components/layout/Layout';
 import BiodataForm from '../components/assessment/BiodataForm';
 import RoleSelection from '../components/assessment/RoleSelection';
-import QuestionCard from '../components/assessment/QuestionCard';
+import QuestionBatch from '../components/assessment/QuestionBatch';
 
 export default function Assessment() {
   const router = useRouter();
@@ -27,10 +27,9 @@ export default function Assessment() {
         return <RoleSelection />;
       case 'generalQuestions':
       case 'roleQuestions':
-        return <QuestionCard />;
+        return <QuestionBatch />;
       default:
-        // If we're not at any of these stages (e.g., 'welcome' or 'results'), 
-        // redirect back to home
+        // If we're not at any of these stages, redirect back to home
         if (typeof window !== 'undefined') {
           router.push('/');
         }
