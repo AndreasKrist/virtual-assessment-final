@@ -141,13 +141,13 @@ export default function Home() {
                 transition={{ delay: 0.8, duration: 0.5 }}
               >
                 <h2 className="text-2xl font-semibold mb-4 text-blue-900">
-                  Welcome to Your IT Career Journey! 👋
+                  Welcome to Prelim Tech Skills Assessor! 👋
                 </h2>
                 <p className="text-lg text-blue-700 mb-4">
-                  This assessment helps you discover your potential in IT and provides personalized course recommendations to boost your career.
+                  This assessment helps you discover your potential in Tech  and provides personalized course recommendations to boost your career.
                 </p>
                 <p className="text-blue-600">
-                  Whether you&apos;re just starting out or looking to advance your skills, we&apos;ll guide you toward the right learning path based on your current knowledge and career goals.
+                  Whether you&apos;re just starting out or looking to advance your skills, we&apos;ll guide you toward the right learning path based on your current knowledge and discipline.
                 </p>
               </motion.div>
 
