@@ -65,12 +65,12 @@ export default function Results() {
       if (sheetsResponse.success) {
         setSaveStatus({ 
           type: 'success', 
-          message: 'Results saved successfully to Google Sheets!' 
+          message: 'Results saved successfully to our Database!' 
         });
       } else {
         setSaveStatus({ 
           type: 'error', 
-          message: 'Error saving to Google Sheets. Please try again.' 
+          message: 'Error saving to our Database. Please try again.' 
         });
       }
     } catch (error) {
