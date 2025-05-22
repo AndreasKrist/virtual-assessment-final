@@ -69,12 +69,12 @@ export default function Footer() {
                     Start Assessment
                   </button>
                 </motion.li>
-                <motion.li 
+                {/* <motion.li 
                   whileHover={{ x: 3 }}
                   transition={{ duration: 0.2 }}
                 >
                   <Link href="/admin" className="text-blue-100 hover:text-white text-sm transition-colors duration-200">Result</Link>
-                </motion.li>
+                </motion.li> */}
               </ul>
             </div>
             

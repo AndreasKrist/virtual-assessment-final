@@ -51,7 +51,7 @@ export default function RoleSelection() {
       <div className="p-10">
         <h2 className="text-3xl font-bold mb-3 text-center text-blue-800">Choose Your Area of Discipline</h2>
         <p className="text-blue-700 text-center mb-10 text-lg">
-          Select the area you want to pursue.
+          Click the discipline of your choice!
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

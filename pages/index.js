@@ -101,13 +101,13 @@ export default function Home() {
         >
           <div className="text-center mb-12">
             <motion.h1 
-              className="text-5xl md:text-6xl font-bold mb-4 text-blue-900 relative"
+              className="text-5xl md:text-5xl font-bold mb-4 text-blue-900 relative"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.7 }}
             >
               <span className="relative inline-block">
-                Prelim Tech Skills Assessor
+                Prelim Tech Skills Assessor [PTSA]
                 <motion.span 
                   className="absolute -bottom-2 left-0 w-full h-1 bg-blue-500"
                   initial={{ width: 0 }}
@@ -142,7 +142,7 @@ export default function Home() {
                 transition={{ delay: 0.8, duration: 0.5 }}
               >
                 <h2 className="text-2xl font-semibold mb-4 text-blue-900">
-                  Welcome to Prelim Tech Skills Assessor! 👋
+                  Welcome to ITEL's Prelim Tech Skills Assessor [PTSA]! 👋
                 </h2>
                 <p className="text-lg text-blue-700 mb-4">
                   This assessment helps you discover your potential in Tech and provides personalized course recommendations to boost your career.
@@ -242,9 +242,9 @@ export default function Home() {
                               4
                             </div>
                             <div className="mt-1">
-                              <h3 className="font-semibold text-lg text-blue-800">Get Your Results</h3>
+                              <h3 className="font-semibold text-lg text-blue-800">Get Your Summary</h3>
                               <p className="text-blue-700 text-sm mt-1">
-                                Receive your success rate and personalized course recommendations
+                                Receive your summary of skills analysis
                               </p>
                             </div>
                           </motion.li>
