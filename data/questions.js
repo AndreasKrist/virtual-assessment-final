@@ -25,7 +25,7 @@ export const biodataQuestions = [
     label: "Age Group",
     type: "select",
     options: ["18-24", "25-34", "35-44", "45-54", "55+"],
-    required: false,
+    required: true,
   }
 ];
 
