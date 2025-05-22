@@ -147,7 +147,7 @@ export default function Home() {
                   This assessment helps you discover your potential in IT and provides personalized course recommendations to boost your career.
                 </p>
                 <p className="text-blue-600">
-                  Whether you're just starting out or looking to advance your skills, we'll guide you toward the right learning path based on your current knowledge and career goals.
+                  Whether you&apos;re just starting out or looking to advance your skills, we&apos;ll guide you toward the right learning path based on your current knowledge and career goals.
                 </p>
               </motion.div>
 
