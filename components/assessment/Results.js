@@ -199,7 +199,7 @@ export default function Results() {
             
             <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-100">
               <p className="text-blue-700 text-sm">
-                <span className="font-semibold">Next Steps:</span> We recommend reviewing the Course Recommendations tab for specific courses that can help you succeed in your chosen career path.
+                <span className="font-semibold">Next Steps:</span> We recommend contacting us to inquire about specific courses that can help you succeed in your chosen career path.
               </p>
             </div>
           </div>
