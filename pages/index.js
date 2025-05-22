@@ -273,7 +273,7 @@ export default function Home() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.4, duration: 0.5 }}
                 >
-                  Takes only 3-7 minutes to complete
+                  Takes only 3-5 minutes to complete
                 </motion.p>
               </motion.div>
             </div>
