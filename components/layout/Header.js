@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { useAssessment } from '../../contexts/AssessmentContext';
@@ -54,9 +55,11 @@ export default function Header() {
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <img 
+              <Image 
                 src="/images/itel-logo.png" 
                 alt="ITEL Logo" 
+                width={40} 
+                height={40}
                 className="h-10 w-auto"
               />
             </motion.div>

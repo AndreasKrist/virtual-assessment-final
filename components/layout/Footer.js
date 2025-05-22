@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useAssessment } from '../../contexts/AssessmentContext';
 
@@ -31,7 +32,13 @@ export default function Footer() {
                 transition={{ duration: 0.5 }}
               >
                 <div className="mr-3 flex items-center justify-center">
-                  <img src="/images/itel-logo.png" alt="ITEL Logo" className="h-8 w-auto" />
+                  <Image 
+                    src="/images/itel-logo.png" 
+                    alt="ITEL Logo" 
+                    width={32} 
+                    height={32}
+                    className="h-8 w-auto"
+                  />
                 </div>
                 <span className="text-xl font-bold text-white">
                   Prelim Tech Skills Assessor
