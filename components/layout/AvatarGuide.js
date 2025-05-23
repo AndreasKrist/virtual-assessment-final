@@ -8,7 +8,7 @@ export default function AvatarGuide() {
   const [currentMessage, setCurrentMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
   const [avatarExpression, setAvatarExpression] = useState('happy');
-  const { stage, selectedRole, currentBatch, currentQuestionSet, biodata, results } = useAssessment();
+  const { stage, selectedRole, currentBatch, biodata, results } = useAssessment();
   const router = useRouter();
   
   // Get contextual messages based on current stage and page
@@ -141,7 +141,8 @@ export default function AvatarGuide() {
     if (showMessage) {
       setShowMessage(false);
     } else {
-      setCurrentMessage(getContextualMessage());
+      const newMessage = getContextualMessage();
+      setCurrentMessage(newMessage);
       setShowMessage(true);
       
       // Auto-hide after 10 seconds
@@ -217,11 +218,24 @@ export default function AvatarGuide() {
         
         {/* Bigger Avatar Container */}
         <div className="relative w-24 h-24 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full shadow-xl border-4 border-white overflow-hidden">
-          {/* Avatar SVG with expressions */}
+          {/* Avatar Image */}
+          <img
+            src="/images/avatar.jpg"
+            alt="Your Guide"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              // Fallback to SVG if image doesn't load
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'block';
+            }}
+          />
+          
+          {/* Fallback SVG (hidden by default) */}
           <svg
             viewBox="0 0 100 100"
-            className="w-full h-full text-white"
+            className="w-full h-full text-white absolute inset-0"
             fill="currentColor"
+            style={{ display: 'none' }}
           >
             {/* Head */}
             <circle cx="50" cy="35" r="12" />
