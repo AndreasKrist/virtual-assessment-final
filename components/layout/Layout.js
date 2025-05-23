@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Header from './Header';
 import Footer from './Footer';
+import AvatarGuide from './AvatarGuide';
 
 // Animation variants for page transitions
 const pageVariants = {
@@ -43,6 +44,7 @@ export default function Layout({ children }) {
       </main>
       
       <Footer />
+      <AvatarGuide />
     </div>
   );
 }
