@@ -63,7 +63,7 @@ export default function AvatarGuide() {
       clearTimeout(inactivityTimerRef.current);
     }
     
-    // Set new timer for auto-popup after user inactivity (5-10 seconds)
+    // Set new timer for auto-popup after 8 seconds of inactivity
     inactivityTimerRef.current = setTimeout(() => {
       if (!showMessage) {
         const helpMessage = getHelpMessage();
@@ -76,7 +76,7 @@ export default function AvatarGuide() {
           setShowMessage(false);
         }, 15000);
       }
-    }, router.pathname === '/' ? 5000 : 7000); // 5 seconds on home page, 7 elsewhere
+    }, router.pathname === '/' ? 7000 : 8000); // Shorter delay on home page
   }, [showMessage, getHelpMessage, router.pathname]);
 
   // Track user interactions
@@ -318,20 +318,26 @@ Which one calls to you? 🤔`;
     }
   };
   
-  // ONLY prepare message content when stage changes - NEVER auto-show messages
+  // Update message when stage changes, but don't show immediately on home page
   useEffect(() => {
-    // Just update the message content, but don't display it
     const newMessage = getContextualMessage();
     setCurrentMessage(newMessage);
     
-    // Hide any currently showing message when navigating to a new page/section
-    if (showMessage) {
-      setShowMessage(false);
+    // Only auto-show message if NOT on home page
+    if (router.pathname !== '/') {
+      setShowMessage(true);
+      
+      // Auto-hide message after 12 seconds (longer for detailed messages)
+      const timer = setTimeout(() => {
+        setShowMessage(false);
+      }, 12000);
+      
+      return () => clearTimeout(timer);
     }
     
     // Reset inactivity timer when stage changes
     resetInactivityTimer();
-  }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate, resetInactivityTimer, getContextualMessage, showMessage]);
+  }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate, resetInactivityTimer, getContextualMessage]);
   
   // Toggle message visibility when avatar is clicked
   const handleAvatarClick = () => {
@@ -352,19 +358,13 @@ Which one calls to you? 🤔`;
     resetInactivityTimer();
   };
   
-  // Handle close button click - Fixed with improved touchable area
-  const handleCloseClick = (e) => {
-    e.stopPropagation(); // Prevent event bubbling
-    setShowMessage(false);
-  };
-  
   // Don't show on admin page
   if (router.pathname === '/admin') {
     return null;
   }
   
   return (
-    <div className="fixed bottom-6 right-6 md:right-16 lg:right-32 z-50">
+    <div className="fixed bottom-6 right-6 z-50">
       {/* Message Bubble - Much Wider and Better Positioned */}
       <AnimatePresence>
         {showMessage && (
@@ -372,17 +372,15 @@ Which one calls to you? 🤔`;
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            className="absolute bottom-28 right-0 md:right-auto md:left-0 mb-4 w-80 sm:w-96 max-h-96 overflow-y-auto"
+            className="absolute bottom-28 right-0 mb-4 w-80 sm:w-96 max-h-96 overflow-y-auto"
           >
             <div className="bg-white rounded-2xl shadow-xl border border-blue-200 p-6 relative">
               <div className="flex justify-between items-start mb-2">
                 <h4 className="text-base font-semibold text-blue-800">Your Personal Guide 🤖</h4>
-                {/* FIXED CLOSE BUTTON - Added padding for larger touch target */}
                 <button
-                  onClick={handleCloseClick}
-                  className="text-gray-400 hover:text-gray-600 transition-colors p-2 -m-2"
+                  onClick={() => setShowMessage(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
                   aria-label="Close help message"
-                  style={{ cursor: 'pointer', touchAction: 'manipulation' }}
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -393,7 +391,7 @@ Which one calls to you? 🤔`;
                 {currentMessage}
               </div>
               {/* Speech bubble tail */}
-              <div className="absolute bottom-0 right-12 md:right-auto md:left-12 transform translate-y-full">
+              <div className="absolute bottom-0 right-12 transform translate-y-full">
                 <div className="w-0 h-0 border-l-10 border-r-10 border-t-10 border-l-transparent border-r-transparent border-t-white"></div>
                 <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-blue-200"></div>
               </div>
