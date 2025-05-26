@@ -130,7 +130,7 @@ export default function BiodataForm() {
           variants={itemVariants}
         >
           <p className="text-blue-700 text-center text-sm">
-            📝 Please fill in your information below, then click the <strong>"Continue"</strong> button at the bottom to move to the next step.
+            📝 Please fill in your information below, then click the <strong>&ldquo;Continue&rdquo;</strong> button at the bottom to move to the next step.
           </p>
         </motion.div>
         
@@ -223,7 +223,7 @@ export default function BiodataForm() {
                 Continue
               </Button>
               <p className="text-xs text-blue-600">
-                👆 Click "Continue" to go to the next step
+                👆 Click &ldquo;Continue&rdquo; to go to the next step
               </p>
             </div>
           </motion.div>
