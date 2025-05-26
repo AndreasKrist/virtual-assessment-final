@@ -230,7 +230,7 @@ export default function QuestionBatch() {
         {/* Detailed Instructions */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
           <p className="text-blue-700 text-center text-sm">
-            📋 For each question below, click either <strong>"Yes"</strong> or <strong>"No"</strong> to answer. After answering all questions, click the <strong>"Continue"</strong> button at the bottom to move to the next section.
+            📋 For each question below, click either &quot;Yes&quot; or &quot;No&quot; to answer. After answering all questions, click the &quot;Continue&quot; button at the bottom to move to the next section.
           </p>
         </div>
         
@@ -357,7 +357,7 @@ export default function QuestionBatch() {
             </Button>
             <p className="text-xs text-blue-600 text-center">
               {allAnswered() 
-                ? "👆 Click 'Continue' to move to the next section" 
+                ? "👆 Click &apos;Continue&apos; to move to the next section" 
                 : "👆 Answer all questions above first"
               }
             </p>

@@ -111,7 +111,7 @@ export default function Results() {
         {/* Clear Instructions */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
           <p className="text-blue-700 text-center text-sm">
-            🎉 <strong>Congratulations!</strong> Review your results below. Click the tabs to see different sections. Don't forget to <strong>"Save My Results"</strong> at the bottom to store your assessment!
+            🎉 <strong>Congratulations!</strong> Review your results below. Click the tabs to see different sections. Don&apos;t forget to <strong>&quot;Save My Results&quot;</strong> at the bottom to store your assessment!
           </p>
         </div>
         
@@ -304,7 +304,7 @@ export default function Results() {
               {isSaving ? 'Saving...' : 'Save My Results'}
             </Button>
             <p className="text-xs text-blue-600">
-              👆 Click "Save My Results" to store your assessment in our database
+              👆 Click &quot;Save My Results&quot; to store your assessment in our database
             </p>
           </div>
         </div>

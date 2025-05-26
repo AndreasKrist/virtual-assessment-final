@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAssessment } from '../../contexts/AssessmentContext';
 import { useRouter } from 'next/router';
@@ -14,7 +14,7 @@ export default function AvatarGuide() {
   const lastInteractionRef = useRef(Date.now());
   
   // Reset inactivity timer whenever user interacts
-  const resetInactivityTimer = () => {
+  const resetInactivityTimer = useCallback(() => {
     lastInteractionRef.current = Date.now();
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
@@ -34,7 +34,7 @@ export default function AvatarGuide() {
         }, 15000);
       }
     }, 8000);
-  };
+  }, [showMessage]);
 
   // Track user interactions
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function AvatarGuide() {
         clearTimeout(inactivityTimerRef.current);
       }
     };
-  }, [showMessage]);
+  }, [showMessage, resetInactivityTimer]);
   
   // Get help message when user is inactive
   const getHelpMessage = () => {
@@ -332,7 +332,7 @@ Which one calls to you? 🤔`;
     resetInactivityTimer();
     
     return () => clearTimeout(timer);
-  }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate]);
+  }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate, resetInactivityTimer]);
   
   // Toggle message visibility when avatar is clicked
   const handleAvatarClick = () => {

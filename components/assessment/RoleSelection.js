@@ -76,7 +76,7 @@ export default function RoleSelection() {
         {/* Clear Instructions */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
           <p className="text-blue-700 text-center text-sm">
-            📋 First, click on one of the disciplines below to select it (it will be highlighted). Then click the <strong>"Continue"</strong> button at the bottom to move to the questions.
+            📋 First, click on one of the disciplines below to select it (it will be highlighted). Then click the <strong>&quot;Continue&quot;</strong> button at the bottom to move to the questions.
           </p>
         </div>
         
