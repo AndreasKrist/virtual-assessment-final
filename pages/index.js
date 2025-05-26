@@ -192,13 +192,13 @@ export default function Home() {
                 >
                   <div className="bg-blue-gradient rounded-xl p-4 sm:p-8">
                     <motion.div 
-                      className="space-y-6"
+                      className="space-y-6 md:space-y-0"
                       variants={containerVariants}
                       initial="hidden"
                       animate={showHowItWorks ? "visible" : "hidden"}
                     >
-                      {/* Mobile-optimized steps layout */}
-                      <div className="space-y-6">
+                      {/* Responsive Grid: 1-column on mobile, 2x2 on desktop */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row">
                           <div className="flex-shrink-0 h-12 w-12 sm:h-10 sm:w-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-medium text-lg mr-0 sm:mr-4 mb-3 sm:mb-0 mx-auto sm:mx-0">
                             1
