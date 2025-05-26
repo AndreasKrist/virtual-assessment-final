@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 
 export default function AvatarGuide() {
-  const [isVisible, setIsVisible] = useState(true);
+  // Removed isVisible state since we always want the avatar to be visible
   const [currentMessage, setCurrentMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
   const [avatarExpression, setAvatarExpression] = useState('happy');
@@ -76,8 +76,8 @@ export default function AvatarGuide() {
           setShowMessage(false);
         }, 15000);
       }
-    }, 8000);
-  }, [showMessage, getHelpMessage]);
+    }, router.pathname === '/' ? 7000 : 8000); // Shorter delay on home page
+  }, [showMessage, getHelpMessage, router.pathname]);
 
   // Track user interactions
   useEffect(() => {
@@ -318,21 +318,25 @@ Which one calls to you? 🤔`;
     }
   };
   
-  // Update message when stage changes
+  // Update message when stage changes, but don't show immediately on home page
   useEffect(() => {
     const newMessage = getContextualMessage();
     setCurrentMessage(newMessage);
-    setShowMessage(true);
     
-    // Auto-hide message after 12 seconds (longer for detailed messages)
-    const timer = setTimeout(() => {
-      setShowMessage(false);
-    }, 12000);
+    // Only auto-show message if NOT on home page
+    if (router.pathname !== '/') {
+      setShowMessage(true);
+      
+      // Auto-hide message after 12 seconds (longer for detailed messages)
+      const timer = setTimeout(() => {
+        setShowMessage(false);
+      }, 12000);
+      
+      return () => clearTimeout(timer);
+    }
     
     // Reset inactivity timer when stage changes
     resetInactivityTimer();
-    
-    return () => clearTimeout(timer);
   }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate, resetInactivityTimer, getContextualMessage]);
   
   // Toggle message visibility when avatar is clicked
@@ -359,8 +363,6 @@ Which one calls to you? 🤔`;
     return null;
   }
   
-  if (!isVisible) return null;
-  
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {/* Message Bubble - Much Wider and Better Positioned */}
@@ -378,6 +380,7 @@ Which one calls to you? 🤔`;
                 <button
                   onClick={() => setShowMessage(false)}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label="Close help message"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -397,7 +400,7 @@ Which one calls to you? 🤔`;
         )}
       </AnimatePresence>
       
-      {/* Bigger Avatar */}
+      {/* Bigger Avatar - No minimize button */}
       <motion.div
         className="relative cursor-pointer"
         whileHover={{ scale: 1.05 }}
@@ -423,7 +426,7 @@ Which one calls to you? 🤔`;
           {/* Avatar Image - Using Next.js Image component instead of img */}
           <div className="relative w-full h-full">
             <Image
-              src="/images/avatar.jpg"
+              src="/images/avatar2.avif"
               alt="Your Guide"
               fill
               sizes="(max-width: 768px) 96px, 96px"
@@ -467,18 +470,6 @@ Which one calls to you? 🤔`;
             }}
           />
         </div>
-        
-        {/* Minimize button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsVisible(false);
-          }}
-          className="absolute -top-3 -left-3 w-8 h-8 bg-white hover:bg-gray-50 rounded-full flex items-center justify-center text-gray-500 text-sm shadow-md transition-colors border border-gray-200"
-          title="Hide Guide"
-        >
-          ×
-        </button>
       </motion.div>
       
       {/* Floating hint when not showing message */}
@@ -497,21 +488,6 @@ Which one calls to you? 🤔`;
         >
           💬 Click for help!
         </motion.div>
-      )}
-      
-      {/* Re-enable button when hidden - Bigger */}
-      {!isVisible && (
-        <motion.button
-          onClick={() => setIsVisible(true)}
-          className="fixed bottom-6 right-6 w-16 h-16 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-xl flex items-center justify-center transition-colors text-2xl"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          title="Show guide"
-        >
-          💬
-        </motion.button>
       )}
     </div>
   );
