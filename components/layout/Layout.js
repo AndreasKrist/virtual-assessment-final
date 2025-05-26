@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Header from './Header';
-import Footer from './Footer';
+// import Footer from './Footer'; // HIDDEN - Uncomment to show footer in the future
 import AvatarGuide from './AvatarGuide';
 
 // Animation variants for page transitions
@@ -43,7 +43,8 @@ export default function Layout({ children }) {
         </motion.div>
       </main>
       
-      <Footer />
+      {/* FOOTER HIDDEN - Uncomment the line below to show footer in the future */}
+      {/* <Footer /> */}
       <AvatarGuide />
     </div>
   );

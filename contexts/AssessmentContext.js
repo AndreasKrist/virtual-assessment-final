@@ -197,7 +197,7 @@ export function AssessmentProvider({ children }) {
     }
   };
 
-  // Calculate assessment results
+  // Calculate assessment results - FIXED to prevent duplicate categories
   const calculateResults = () => {
     // Count 'yes' answers
     const generalYesCount = Object.values(answers.general).filter(answer => answer === true).length;
@@ -225,18 +225,29 @@ export function AssessmentProvider({ children }) {
     const weightedScore = (curvedGeneralScore * generalWeight) + (curvedRoleScore * roleWeight);
     const finalSuccessRate = Math.max(55, Math.round(weightedScore * 100));
     
-    // Identify strengths and weaknesses
-    const strengths = [];
-    const weaknesses = [];
+    // FIXED: Group questions by category and calculate percentage for each category
+    const categoryStats = {};
     const recommendations = [];
     
-    // Check general questions
+    // Process general questions
     generalQuestions.forEach(question => {
+      const category = question.category;
       const answered = answers.general[question.id];
+      
+      if (!categoryStats[category]) {
+        categoryStats[category] = {
+          total: 0,
+          correct: 0,
+          questions: []
+        };
+      }
+      
+      categoryStats[category].total++;
+      categoryStats[category].questions.push(question);
+      
       if (answered === true) {
-        strengths.push(question.category);
+        categoryStats[category].correct++;
       } else if (answered === false) {
-        weaknesses.push(question.category);
         recommendations.push({
           questionId: question.id,
           questionText: question.text,
@@ -246,13 +257,25 @@ export function AssessmentProvider({ children }) {
       }
     });
     
-    // Check role-specific questions
+    // Process role-specific questions
     roleQuestions[selectedRole].forEach(question => {
+      const category = question.category;
       const answered = answers.roleSpecific[question.id];
+      
+      if (!categoryStats[category]) {
+        categoryStats[category] = {
+          total: 0,
+          correct: 0,
+          questions: []
+        };
+      }
+      
+      categoryStats[category].total++;
+      categoryStats[category].questions.push(question);
+      
       if (answered === true) {
-        strengths.push(question.category);
+        categoryStats[category].correct++;
       } else if (answered === false) {
-        weaknesses.push(question.category);
         recommendations.push({
           questionId: question.id,
           questionText: question.text,
@@ -260,6 +283,24 @@ export function AssessmentProvider({ children }) {
           courseDetails: courseCatalog[question.courseRecommendation] || null
         });
       }
+    });
+    
+    // FIXED: Determine strengths and weaknesses based on category performance
+    const strengths = [];
+    const weaknesses = [];
+    
+    Object.entries(categoryStats).forEach(([category, stats]) => {
+      const percentage = stats.correct / stats.total;
+      
+      // Only add to strengths if 70% or more correct answers
+      if (percentage >= 0.7) {
+        strengths.push(category);
+      }
+      // Only add to weaknesses if 30% or less correct answers  
+      else if (percentage <= 0.3) {
+        weaknesses.push(category);
+      }
+      // Categories with 31-69% are neutral (not shown in either section)
     });
     
     // Sort and limit recommendations
@@ -277,8 +318,8 @@ export function AssessmentProvider({ children }) {
     setResults({
       successRate: finalSuccessRate,
       recommendations: topRecommendations,
-      strengths: [...new Set(strengths)],
-      weaknesses: [...new Set(weaknesses)]
+      strengths: [...new Set(strengths)], // Remove any duplicates just in case
+      weaknesses: [...new Set(weaknesses)] // Remove any duplicates just in case
     });
   };
 

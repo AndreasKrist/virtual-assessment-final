@@ -3,12 +3,14 @@ import { useAssessment } from '../../contexts/AssessmentContext';
 import Button from '../ui/Button';
 import { saveUserData } from '../../lib/saveUserData';
 import { saveToGoogleSheet } from '../../lib/googleSheets';
+import { useRouter } from 'next/router';
 
 export default function Results() {
   const { results, biodata, selectedRole, resetAssessment } = useAssessment();
   const [activeTab, setActiveTab] = useState('overview');
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null);
+  const router = useRouter();
   
   // Map role IDs to readable names
   const roleNames = {
@@ -78,14 +80,38 @@ export default function Results() {
       setIsSaving(false);
     }
   };
+
+  const handleStartOver = () => {
+    resetAssessment();
+    router.push('/');
+  };
   
   return (
     <div className="max-w-4xl w-full mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-blue-100 transition-all duration-150">
       <div className="p-4 sm:p-6 lg:p-10">
+        
+        {/* Start Over Button */}
+        <div className="flex justify-center mb-6">
+          <Button 
+            variant="outline" 
+            onClick={handleStartOver}
+            className="px-6 py-2 text-sm"
+          >
+            🔄 Start Over
+          </Button>
+        </div>
+
         <div className="text-center mb-6 sm:mb-8">
           <h2 className="text-xl sm:text-2xl font-bold mb-2 text-blue-800">Your Assessment Summary</h2>
           <p className="text-sm sm:text-base text-blue-600">
             Based on your responses, here&apos;s your assessment summary analysis
+          </p>
+        </div>
+
+        {/* Clear Instructions */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <p className="text-blue-700 text-center text-sm">
+            🎉 <strong>Congratulations!</strong> Review your results below. Click the tabs to see different sections. Don't forget to <strong>"Save My Results"</strong> at the bottom to store your assessment!
           </p>
         </div>
         
@@ -268,22 +294,19 @@ export default function Results() {
         )}
         
         {/* Actions - Mobile Optimized */}
-        <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:justify-between sm:items-center mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-blue-100">
-          <Button 
-            variant="secondary" 
-            onClick={resetAssessment}
-            className="w-full sm:w-auto px-8 py-3"
-          >
-            Start Over
-          </Button>
-          
-          <Button 
-            onClick={handleSaveResults}
-            disabled={isSaving}
-            className="w-full sm:w-auto px-8 py-3"
-          >
-            {isSaving ? 'Saving...' : 'Save My Results'}
-          </Button>
+        <div className="flex flex-col items-center mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-blue-100">
+          <div className="text-center mb-4">
+            <Button 
+              onClick={handleSaveResults}
+              disabled={isSaving}
+              className="w-full sm:w-auto px-8 py-3 mb-2"
+            >
+              {isSaving ? 'Saving...' : 'Save My Results'}
+            </Button>
+            <p className="text-xs text-blue-600">
+              👆 Click "Save My Results" to store your assessment in our database
+            </p>
+          </div>
         </div>
       </div>
     </div>

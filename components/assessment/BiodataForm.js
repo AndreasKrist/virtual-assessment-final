@@ -3,11 +3,13 @@ import { useAssessment } from '../../contexts/AssessmentContext';
 import Button from '../ui/Button';
 import { biodataQuestions } from '../../data/questions';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
 
 export default function BiodataForm() {
-  const { biodata, updateBiodata, nextStage } = useAssessment();
+  const { biodata, updateBiodata, nextStage, resetAssessment } = useAssessment();
   const [errors, setErrors] = useState({});
   const [activeField, setActiveField] = useState(null);
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,6 +48,11 @@ export default function BiodataForm() {
         document.getElementById(firstErrorId)?.focus();
       }
     }
+  };
+
+  const handleStartOver = () => {
+    resetAssessment();
+    router.push('/');
   };
 
   // Animation variants
@@ -96,12 +103,36 @@ export default function BiodataForm() {
       animate="visible"
     >
       <div className="p-8">
+        {/* Start Over Button */}
+        <motion.div 
+          className="flex justify-center mb-6"
+          variants={itemVariants}
+        >
+          <Button 
+            variant="outline" 
+            onClick={handleStartOver}
+            className="px-6 py-2 text-sm"
+          >
+            🔄 Start Over
+          </Button>
+        </motion.div>
+
         <motion.h2 
-          className="text-2xl font-bold mb-8 text-center text-blue-800"
+          className="text-2xl font-bold mb-4 text-center text-blue-800"
           variants={itemVariants}
         >
           Tell Us About Yourself
         </motion.h2>
+        
+        {/* Clear Instructions */}
+        <motion.div 
+          className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8"
+          variants={itemVariants}
+        >
+          <p className="text-blue-700 text-center text-sm">
+            📝 Please fill in your information below, then click the <strong>"Continue"</strong> button at the bottom to move to the next step.
+          </p>
+        </motion.div>
         
         <motion.form 
           onSubmit={handleSubmit} 
@@ -181,15 +212,20 @@ export default function BiodataForm() {
           ))}
           
           <motion.div 
-            className="flex justify-end pt-4"
+            className="flex justify-center pt-4"
             variants={itemVariants}
           >
-            <Button 
-              type="submit"
-              className="px-8 py-3"
-            >
-              Continue
-            </Button>
+            <div className="text-center">
+              <Button 
+                type="submit"
+                className="px-8 py-3 mb-2"
+              >
+                Continue
+              </Button>
+              <p className="text-xs text-blue-600">
+                👆 Click "Continue" to go to the next step
+              </p>
+            </div>
           </motion.div>
         </motion.form>
       </div>

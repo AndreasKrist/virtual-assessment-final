@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAssessment } from '../../contexts/AssessmentContext';
 import Button from '../ui/Button';
 import ProgressBar from './ProgressBar';
+import { useRouter } from 'next/router';
 
 export default function QuestionBatch() {
   const { 
@@ -14,7 +15,8 @@ export default function QuestionBatch() {
     getBatchProgress,
     currentBatch,
     selectedRole,
-    goBackToRoleSelection
+    goBackToRoleSelection,
+    resetAssessment
   } = useAssessment();
   
   const questions = getCurrentBatch();
@@ -22,6 +24,7 @@ export default function QuestionBatch() {
   const [batchAnswers, setBatchAnswers] = useState({});
   const [showExplanations, setShowExplanations] = useState({});
   const [showCategoryConfirm, setShowCategoryConfirm] = useState(false);
+  const router = useRouter();
   
   // Scroll to top when component mounts or batch changes
   useEffect(() => {
@@ -149,9 +152,25 @@ export default function QuestionBatch() {
     goBackToRoleSelection();
   };
 
+  const handleStartOver = () => {
+    resetAssessment();
+    router.push('/');
+  };
+
   return (
     <div className="max-w-5xl w-full mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-blue-100">
       <div className="p-4 sm:p-6 lg:p-8">
+
+        {/* Start Over Button */}
+        <div className="flex justify-center mb-4">
+          <Button 
+            variant="outline" 
+            onClick={handleStartOver}
+            className="px-6 py-2 text-sm"
+          >
+            🔄 Start Over
+          </Button>
+        </div>
 
         <ProgressBar 
           current={progress.current} 
@@ -205,6 +224,13 @@ export default function QuestionBatch() {
           </h2>
           <p className="text-sm sm:text-base text-blue-600 mb-4">
             Answer all questions below, then click Continue
+          </p>
+        </div>
+
+        {/* Detailed Instructions */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <p className="text-blue-700 text-center text-sm">
+            📋 For each question below, click either <strong>"Yes"</strong> or <strong>"No"</strong> to answer. After answering all questions, click the <strong>"Continue"</strong> button at the bottom to move to the next section.
           </p>
         </div>
         
@@ -302,28 +328,39 @@ export default function QuestionBatch() {
         
         {/* FIXED BUTTON ALIGNMENT - Both buttons now have exact same styling */}
         <div className="flex flex-col sm:flex-row justify-between items-center pt-6 border-t border-blue-100 space-y-4 sm:space-y-0 sm:gap-4">
-          <Button 
-            variant="secondary" 
-            onClick={prevStage}
-            className="w-full sm:flex-1 px-8 py-3 min-h-[48px]"
-          >
-            Back
-          </Button>
+          <div className="w-full sm:flex-1 text-center">
+            <Button 
+              variant="secondary" 
+              onClick={prevStage}
+              className="w-full sm:w-auto px-8 py-3 min-h-[48px] mb-2"
+            >
+              Back
+            </Button>
+            <p className="text-xs text-blue-600">
+              👆 Click "Back" to go to the previous section
+            </p>
+          </div>
           
           <div className="w-full sm:flex-1 flex flex-col items-center space-y-3 sm:space-y-0">
             {!allAnswered() && (
-              <span className="text-xs sm:text-sm text-blue-600 text-center">
+              <span className="text-xs sm:text-sm text-blue-600 text-center mb-2">
                 Please answer all questions to continue
               </span>
             )}
             <Button 
               onClick={handleNext}
               disabled={!allAnswered()}
-              className={`w-full px-8 py-3 min-h-[48px] ${allAnswered() ? 'shadow-lg shadow-blue-500/20' : ''}`}
+              className={`w-full sm:w-auto px-8 py-3 min-h-[48px] mb-2 ${allAnswered() ? 'shadow-lg shadow-blue-500/20' : ''}`}
               id="continue-button"
             >
               {progress.current === progress.total ? 'See Results' : 'Continue'}
             </Button>
+            <p className="text-xs text-blue-600 text-center">
+              {allAnswered() 
+                ? "👆 Click 'Continue' to move to the next section" 
+                : "👆 Answer all questions above first"
+              }
+            </p>
           </div>
         </div>
       </div>

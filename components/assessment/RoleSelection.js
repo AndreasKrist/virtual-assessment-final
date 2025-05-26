@@ -1,9 +1,11 @@
 import React from 'react';
 import { useAssessment } from '../../contexts/AssessmentContext';
 import Button from '../ui/Button';
+import { useRouter } from 'next/router';
 
 export default function RoleSelection() {
-  const { selectRole, nextStage, selectedRole } = useAssessment();
+  const { selectRole, nextStage, selectedRole, resetAssessment, prevStage } = useAssessment();
+  const router = useRouter();
   
   const roles = [
     {
@@ -46,15 +48,39 @@ export default function RoleSelection() {
     }
   };
 
+  const handleStartOver = () => {
+    resetAssessment();
+    router.push('/');
+  };
+
   return (
     <div className="max-w-4xl w-full mx-auto bg-white rounded-xl shadow-lg overflow-hidden border border-blue-200">
       <div className="p-4 sm:p-6 lg:p-10">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3 text-center text-blue-800">Choose Your Area of Discipline</h2>
-        <p className="text-blue-700 text-center mb-6 sm:mb-10 text-base sm:text-lg">
-          Click the discipline of your choice!
-        </p>
         
-        <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8 lg:grid-cols-2">
+        {/* Start Over Button */}
+        <div className="flex justify-center mb-6">
+          <Button 
+            variant="outline" 
+            onClick={handleStartOver}
+            className="px-6 py-2 text-sm"
+          >
+            🔄 Start Over
+          </Button>
+        </div>
+
+        <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3 text-center text-blue-800">Choose Your Area of Discipline</h2>
+        <p className="text-blue-700 text-center mb-6 sm:mb-8 text-base sm:text-lg">
+          Click one of the disciplines below to select it!
+        </p>
+
+        {/* Clear Instructions */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+          <p className="text-blue-700 text-center text-sm">
+            📋 First, click on one of the disciplines below to select it (it will be highlighted). Then click the <strong>"Continue"</strong> button at the bottom to move to the questions.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8 lg:grid-cols-2 mb-8">
           {roles.map((role) => (
             <div 
               key={role.id}
@@ -91,15 +117,30 @@ export default function RoleSelection() {
           ))}
         </div>
         
-        <div className="flex justify-end mt-6 sm:mt-10">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <Button 
-            onClick={handleContinue}
-            disabled={!selectedRole}
-            size="large"
-            className="w-full sm:w-auto px-8 py-4 text-lg"
+            variant="secondary" 
+            onClick={prevStage}
+            className="w-full sm:w-auto px-8 py-3"
           >
-            Continue
+            Back
           </Button>
+          
+          <div className="text-center">
+            <Button 
+              onClick={handleContinue}
+              disabled={!selectedRole}
+              className={`w-full sm:w-auto px-8 py-4 text-lg mb-2 ${selectedRole ? 'shadow-lg shadow-blue-500/20' : ''}`}
+            >
+              Continue
+            </Button>
+            <p className="text-xs text-blue-600">
+              {selectedRole 
+                ? "👆 Click 'Continue' to start the questions" 
+                : "👆 First select a discipline above, then click 'Continue'"
+              }
+            </p>
+          </div>
         </div>
       </div>
     </div>
