@@ -13,54 +13,6 @@ export default function AvatarGuide() {
   const inactivityTimerRef = useRef(null);
   const lastInteractionRef = useRef(Date.now());
   
-  // Reset inactivity timer whenever user interacts
-  const resetInactivityTimer = useCallback(() => {
-    lastInteractionRef.current = Date.now();
-    if (inactivityTimerRef.current) {
-      clearTimeout(inactivityTimerRef.current);
-    }
-    
-    // Set new timer for auto-popup after 8 seconds of inactivity
-    inactivityTimerRef.current = setTimeout(() => {
-      if (!showMessage) {
-        const helpMessage = getHelpMessage();
-        setCurrentMessage(helpMessage);
-        setAvatarExpression('helpful');
-        setShowMessage(true);
-        
-        // Auto-hide after 15 seconds
-        setTimeout(() => {
-          setShowMessage(false);
-        }, 15000);
-      }
-    }, 8000);
-  }, [showMessage]);
-
-  // Track user interactions
-  useEffect(() => {
-    const handleUserActivity = () => {
-      resetInactivityTimer();
-    };
-
-    // Listen for various user interactions
-    const events = ['click', 'keydown', 'scroll', 'touchstart'];
-    events.forEach(event => {
-      document.addEventListener(event, handleUserActivity, { passive: true });
-    });
-
-    // Start the timer initially
-    resetInactivityTimer();
-
-    return () => {
-      events.forEach(event => {
-        document.removeEventListener(event, handleUserActivity);
-      });
-      if (inactivityTimerRef.current) {
-        clearTimeout(inactivityTimerRef.current);
-      }
-    };
-  }, [showMessage, resetInactivityTimer]);
-  
   // Get help message when user is inactive
   const getHelpMessage = () => {
     const firstName = biodata.fullName ? biodata.fullName.split(' ')[0] : 'there';
@@ -102,6 +54,55 @@ export default function AvatarGuide() {
         return `${firstName}! 😊 I'm here to help guide you through the assessment. If you need assistance, just click on me anytime! Remember to click buttons as instructed to move through each step.`;
     }
   };
+  
+  // Reset inactivity timer whenever user interacts
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const resetInactivityTimer = useCallback(() => {
+    lastInteractionRef.current = Date.now();
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+    }
+    
+    // Set new timer for auto-popup after 8 seconds of inactivity
+    inactivityTimerRef.current = setTimeout(() => {
+      if (!showMessage) {
+        const helpMessage = getHelpMessage();
+        setCurrentMessage(helpMessage);
+        setAvatarExpression('helpful');
+        setShowMessage(true);
+        
+        // Auto-hide after 15 seconds
+        setTimeout(() => {
+          setShowMessage(false);
+        }, 15000);
+      }
+    }, 8000);
+  }, [showMessage]); // we're disabling the rule so we don't need to include getHelpMessage
+
+  // Track user interactions
+  useEffect(() => {
+    const handleUserActivity = () => {
+      resetInactivityTimer();
+    };
+
+    // Listen for various user interactions
+    const events = ['click', 'keydown', 'scroll', 'touchstart'];
+    events.forEach(event => {
+      document.addEventListener(event, handleUserActivity, { passive: true });
+    });
+
+    // Start the timer initially
+    resetInactivityTimer();
+
+    return () => {
+      events.forEach(event => {
+        document.removeEventListener(event, handleUserActivity);
+      });
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+    };
+  }, [showMessage, resetInactivityTimer]);
   
   // Get contextual messages based on current stage and page
   const getContextualMessage = () => {
