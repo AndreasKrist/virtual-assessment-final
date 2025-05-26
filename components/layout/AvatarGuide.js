@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAssessment } from '../../contexts/AssessmentContext';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 export default function AvatarGuide() {
   const [isVisible, setIsVisible] = useState(true);
@@ -14,7 +15,7 @@ export default function AvatarGuide() {
   const lastInteractionRef = useRef(Date.now());
   
   // Get help message when user is inactive
-  const getHelpMessage = () => {
+  const getHelpMessage = useCallback(() => {
     const firstName = biodata.fullName ? biodata.fullName.split(' ')[0] : 'there';
     
     if (router.pathname === '/') {
@@ -53,10 +54,9 @@ export default function AvatarGuide() {
       default:
         return `${firstName}! 😊 I'm here to help guide you through the assessment. If you need assistance, just click on me anytime! Remember to click buttons as instructed to move through each step.`;
     }
-  };
+  }, [biodata.fullName, router.pathname, stage, currentBatch, selectedRole]);
   
   // Reset inactivity timer whenever user interacts
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetInactivityTimer = useCallback(() => {
     lastInteractionRef.current = Date.now();
     if (inactivityTimerRef.current) {
@@ -77,7 +77,7 @@ export default function AvatarGuide() {
         }, 15000);
       }
     }, 8000);
-  }, [showMessage]); // we're disabling the rule so we don't need to include getHelpMessage
+  }, [showMessage, getHelpMessage]);
 
   // Track user interactions
   useEffect(() => {
@@ -105,7 +105,7 @@ export default function AvatarGuide() {
   }, [showMessage, resetInactivityTimer]);
   
   // Get contextual messages based on current stage and page
-  const getContextualMessage = () => {
+  const getContextualMessage = useCallback(() => {
     const firstName = biodata.fullName ? biodata.fullName.split(' ')[0] : 'there';
     
     if (router.pathname === '/') {
@@ -269,7 +269,7 @@ Which one calls to you? 🤔`;
 
 🚀 **Remember:** There are no wrong answers - we're here to discover how to help you succeed in IT!`;
     }
-  };
+  }, [biodata.fullName, router.pathname, stage, currentBatch, selectedRole, results.successRate]);
   
   // Different avatar expressions
   const getAvatarExpression = () => {
@@ -333,7 +333,7 @@ Which one calls to you? 🤔`;
     resetInactivityTimer();
     
     return () => clearTimeout(timer);
-  }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate, resetInactivityTimer]);
+  }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate, resetInactivityTimer, getContextualMessage]);
   
   // Toggle message visibility when avatar is clicked
   const handleAvatarClick = () => {
@@ -420,17 +420,24 @@ Which one calls to you? 🤔`;
         
         {/* Bigger Avatar Container */}
         <div className="relative w-24 h-24 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full shadow-xl border-4 border-white overflow-hidden">
-          {/* Avatar Image */}
-          <img
-            src="/images/avatar.jpg"
-            alt="Your Guide"
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              // Fallback to SVG if image doesn't load
-              e.target.style.display = 'none';
-              e.target.nextSibling.style.display = 'block';
-            }}
-          />
+          {/* Avatar Image - Using Next.js Image component instead of img */}
+          <div className="relative w-full h-full">
+            <Image
+              src="/images/avatar.jpg"
+              alt="Your Guide"
+              fill
+              sizes="(max-width: 768px) 96px, 96px"
+              className="object-cover"
+              onError={(e) => {
+                // Fallback to SVG if image doesn't load
+                const target = e.target;
+                if (target && target.nextSibling) {
+                  target.style.display = 'none';
+                  target.nextSibling.style.display = 'block';
+                }
+              }}
+            />
+          </div>
           
           {/* Fallback SVG (hidden by default) */}
           <svg

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const router = useRouter();
   
   // Handle scroll effect
   useEffect(() => {
