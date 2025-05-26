@@ -13,6 +13,8 @@ export default function AvatarGuide() {
   const router = useRouter();
   const inactivityTimerRef = useRef(null);
   const lastInteractionRef = useRef(Date.now());
+  const [userClosedMessage, setUserClosedMessage] = useState(false);
+  const lastStageRef = useRef(stage);
   
   // Get help message when user is inactive
   const getHelpMessage = useCallback(() => {
@@ -65,7 +67,7 @@ export default function AvatarGuide() {
     
     // Set new timer for auto-popup after 8 seconds of inactivity
     inactivityTimerRef.current = setTimeout(() => {
-      if (!showMessage) {
+      if (!showMessage && !userClosedMessage) { // Don't show if user manually closed
         const helpMessage = getHelpMessage();
         setCurrentMessage(helpMessage);
         setAvatarExpression('helpful');
@@ -77,7 +79,7 @@ export default function AvatarGuide() {
         }, 15000);
       }
     }, router.pathname === '/' ? 7000 : 8000); // Shorter delay on home page
-  }, [showMessage, getHelpMessage, router.pathname]);
+  }, [showMessage, getHelpMessage, router.pathname, userClosedMessage]);
 
   // Track user interactions
   useEffect(() => {
@@ -323,30 +325,40 @@ Which one calls to you? 🤔`;
     const newMessage = getContextualMessage();
     setCurrentMessage(newMessage);
     
-    // Only auto-show message if NOT on home page
-    if (router.pathname !== '/') {
-      setShowMessage(true);
-      
-      // Auto-hide message after 12 seconds (longer for detailed messages)
-      const timer = setTimeout(() => {
-        setShowMessage(false);
-      }, 12000);
-      
-      return () => clearTimeout(timer);
+    // Check if this is an actual stage change
+    const stageChanged = stage !== lastStageRef.current;
+    lastStageRef.current = stage;
+    
+    // Only auto-show message if NOT on home page AND stage actually changed OR user didn't manually close
+    if (router.pathname !== '/' && (stageChanged || !userClosedMessage)) {
+      // Only show if stage changed or user hasn't manually closed the message
+      if (stageChanged) {
+        setShowMessage(true);
+        setUserClosedMessage(false); // Reset the manual close flag on stage change
+        
+        // Auto-hide message after 12 seconds (longer for detailed messages)
+        const timer = setTimeout(() => {
+          setShowMessage(false);
+        }, 12000);
+        
+        return () => clearTimeout(timer);
+      }
     }
     
     // Reset inactivity timer when stage changes
     resetInactivityTimer();
-  }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate, resetInactivityTimer, getContextualMessage]);
+  }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate, resetInactivityTimer, getContextualMessage, userClosedMessage]);
   
   // Toggle message visibility when avatar is clicked
   const handleAvatarClick = () => {
     if (showMessage) {
       setShowMessage(false);
+      setUserClosedMessage(true); // Track that user manually closed
     } else {
       const newMessage = getContextualMessage();
       setCurrentMessage(newMessage);
       setShowMessage(true);
+      setUserClosedMessage(false); // Reset when user manually opens
       
       // Auto-hide after 12 seconds
       setTimeout(() => {
@@ -357,6 +369,11 @@ Which one calls to you? 🤔`;
     // Reset activity timer when user clicks avatar
     resetInactivityTimer();
   };
+  
+  // Reset manual close flag when route changes
+  useEffect(() => {
+    setUserClosedMessage(false);
+  }, [router.pathname]);
   
   // Don't show on admin page
   if (router.pathname === '/admin') {
@@ -378,7 +395,10 @@ Which one calls to you? 🤔`;
               <div className="flex justify-between items-start mb-2">
                 <h4 className="text-base font-semibold text-blue-800">Your Personal Guide 🤖</h4>
                 <button
-                  onClick={() => setShowMessage(false)}
+                  onClick={() => {
+                    setShowMessage(false);
+                    setUserClosedMessage(true); // Track manual close
+                  }}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                   aria-label="Close help message"
                 >
