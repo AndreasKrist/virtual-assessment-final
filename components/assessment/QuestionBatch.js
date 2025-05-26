@@ -157,13 +157,6 @@ export default function QuestionBatch() {
     router.push('/');
   };
 
-  // Function to safely render text with apostrophes and quotes
-  const renderSafeText = (text) => {
-    // This is a React component, so we can just return the string directly
-    // and React will handle it correctly
-    return text;
-  };
-
   return (
     <div className="max-w-5xl w-full mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-blue-100">
       <div className="p-4 sm:p-6 lg:p-8">
