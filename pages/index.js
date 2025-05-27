@@ -144,7 +144,7 @@ export default function Home() {
                 transition={{ delay: 0.8, duration: 0.5 }}
               >
                 <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-blue-900">
-                  Welcome to ITEL&apos;s Prelim Tech Skills Assessor [PTSA]! 👋
+                  Welcome to ITEL&apos;s Prelim Tech Skills Assessor (PTSA)! 👋
                 </h2>
                 <p className="text-base sm:text-lg text-blue-700 mb-4">
                   This assessment helps you discover your potential in Tech and provides personalized course recommendations to boost your career.
