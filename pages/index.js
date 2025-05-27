@@ -109,7 +109,7 @@ export default function Home() {
             >
               <span className="relative inline-block">
                 <span className="block sm:inline">Prelim Tech Skills</span>
-                <span className="block sm:inline"> Assessor [PTSA]</span>
+                <span className="block sm:inline"> Assessor (PTSA)</span>
                 <motion.span 
                   className="absolute -bottom-2 left-0 w-full h-1 bg-blue-500"
                   initial={{ width: 0 }}
