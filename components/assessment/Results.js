@@ -105,8 +105,8 @@ export default function Results() {
           </p>
         </div>
         
-        {/* Tabs - Mobile Optimized */}
-        {/* <div className="flex border-b border-blue-100 mb-4 sm:mb-6 overflow-x-auto">
+{/* Tabs - Mobile Optimized */}
+        <div className="flex border-b border-blue-100 mb-4 sm:mb-6 overflow-x-auto">
           <button
             onClick={() => setActiveTab('overview')}
             className={`py-2 sm:py-3 px-3 sm:px-4 border-b-2 font-medium text-sm sm:text-base whitespace-nowrap ${
@@ -117,6 +117,7 @@ export default function Results() {
           >
             Overview
           </button>
+          {/* 
           <button
             onClick={() => setActiveTab('recommendations')}
             className={`py-2 sm:py-3 px-3 sm:px-4 border-b-2 font-medium text-sm sm:text-base whitespace-nowrap ${
@@ -127,8 +128,8 @@ export default function Results() {
           >
             Course Recommendations
           </button>
-        </div> */}
-        
+          */}
+        </div>
         {/* Overview Tab */}
         {activeTab === 'overview' && (
           <div>
