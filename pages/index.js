@@ -125,7 +125,8 @@ export default function Home() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.7 }}
             >
-              Unlock Your IT Potential with Personalized Course Recommendations.
+              {/* Unlock Your IT Potential with Personalized Course Recommendations. */}
+              Explore Your IT Know-How with the PTSA
             </motion.p>
           </div>
           
@@ -147,10 +148,13 @@ export default function Home() {
                   Welcome to ITEL&apos;s Prelim Tech Skills Assessor (PTSA)! 👋
                 </h2>
                 <p className="text-base sm:text-lg text-blue-700 mb-4">
-                  This assessment helps you discover your potential in Tech and provides personalized course recommendations to boost your career.
+                  {/* This assessment helps you discover your potential in Tech and provides personalized course recommendations to boost your career. */}
+                  This assessment is your first step to discovering if a career in Network Administration or Cybersecurity is right for you.
+                  We'll assess your skills and recommend personalized courses to help you achieve your goals.
                 </p>
                 <p className="text-sm sm:text-base text-blue-600">
-                  Whether you&apos;re just starting out or looking to advance your skills, we&apos;ll guide you toward the right learning path based on your current knowledge and discipline.
+                  {/* Whether you&apos;re just starting out or looking to advance your skills, we&apos;ll guide you toward the right learning path based on your current knowledge and discipline. */}
+                  {/* We'll assess your skills and recommend personalized courses to help you achieve your goals. */}
                 </p>
               </motion.div>
 
