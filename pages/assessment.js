@@ -44,7 +44,8 @@ export default function Assessment() {
         <meta name="description" content="Take your IT career assessment to discover your potential." />
       </Head>
       
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-12 pb-32 sm:pb-24">
+
         {renderStageComponent()}
       </div>
     </Layout>
