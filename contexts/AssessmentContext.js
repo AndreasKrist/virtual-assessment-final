@@ -197,8 +197,13 @@ export function AssessmentProvider({ children }) {
     }
   };
 
-  // Calculate assessment results - FIXED to prevent duplicate categories
+  // FIXED: Calculate assessment results with proper category analysis
   const calculateResults = () => {
+    console.log('=== CALCULATING RESULTS ===');
+    console.log('General answers:', answers.general);
+    console.log('Role-specific answers:', answers.roleSpecific);
+    console.log('Selected role:', selectedRole);
+    
     // Count 'yes' answers
     const generalYesCount = Object.values(answers.general).filter(answer => answer === true).length;
     const roleYesCount = Object.values(answers.roleSpecific).filter(answer => answer === true).length;
@@ -238,7 +243,8 @@ export function AssessmentProvider({ children }) {
         categoryStats[category] = {
           total: 0,
           correct: 0,
-          questions: []
+          questions: [],
+          isRoleSpecific: false
         };
       }
       
@@ -252,38 +258,45 @@ export function AssessmentProvider({ children }) {
           questionId: question.id,
           questionText: question.text,
           courseName: question.courseRecommendation,
+          category: question.category,
           courseDetails: courseCatalog[question.courseRecommendation] || null
         });
       }
     });
     
     // Process role-specific questions
-    roleQuestions[selectedRole].forEach(question => {
-      const category = question.category;
-      const answered = answers.roleSpecific[question.id];
-      
-      if (!categoryStats[category]) {
-        categoryStats[category] = {
-          total: 0,
-          correct: 0,
-          questions: []
-        };
-      }
-      
-      categoryStats[category].total++;
-      categoryStats[category].questions.push(question);
-      
-      if (answered === true) {
-        categoryStats[category].correct++;
-      } else if (answered === false) {
-        recommendations.push({
-          questionId: question.id,
-          questionText: question.text,
-          courseName: question.courseRecommendation,
-          courseDetails: courseCatalog[question.courseRecommendation] || null
-        });
-      }
-    });
+    if (selectedRole && roleQuestions[selectedRole]) {
+      roleQuestions[selectedRole].forEach(question => {
+        const category = question.category;
+        const answered = answers.roleSpecific[question.id];
+        
+        if (!categoryStats[category]) {
+          categoryStats[category] = {
+            total: 0,
+            correct: 0,
+            questions: [],
+            isRoleSpecific: true
+          };
+        }
+        
+        categoryStats[category].total++;
+        categoryStats[category].questions.push(question);
+        
+        if (answered === true) {
+          categoryStats[category].correct++;
+        } else if (answered === false) {
+          recommendations.push({
+            questionId: question.id,
+            questionText: question.text,
+            courseName: question.courseRecommendation,
+            category: question.category,
+            courseDetails: courseCatalog[question.courseRecommendation] || null
+          });
+        }
+      });
+    }
+    
+    console.log('Category stats:', categoryStats);
     
     // FIXED: Determine strengths and weaknesses based on category performance
     const strengths = [];
@@ -291,22 +304,31 @@ export function AssessmentProvider({ children }) {
     
     Object.entries(categoryStats).forEach(([category, stats]) => {
       const percentage = stats.correct / stats.total;
+      console.log(`Category: ${category}, Correct: ${stats.correct}/${stats.total} = ${(percentage * 100).toFixed(1)}%`);
       
-      // Only add to strengths if 70% or more correct answers
-      if (percentage >= 0.7) {
+      // FIXED: More balanced thresholds for strengths and weaknesses
+      if (percentage >= 0.8) {
+        // 80% or more correct answers = strength
         strengths.push(category);
-      }
-      // Only add to weaknesses if 30% or less correct answers  
-      else if (percentage <= 0.3) {
+        console.log(`✅ ${category} added to STRENGTHS (${(percentage * 100).toFixed(1)}%)`);
+      } else if (percentage <= 0.4) {
+        // 40% or less correct answers = weakness  
         weaknesses.push(category);
+        console.log(`❌ ${category} added to WEAKNESSES (${(percentage * 100).toFixed(1)}%)`);
+      } else {
+        console.log(`➖ ${category} is NEUTRAL (${(percentage * 100).toFixed(1)}%)`);
       }
-      // Categories with 31-69% are neutral (not shown in either section)
     });
     
-    // Sort and limit recommendations
+    console.log('Final strengths:', strengths);
+    console.log('Final weaknesses:', weaknesses);
+    
+    // Sort and limit recommendations (prioritize role-specific)
     recommendations.sort((a, b) => {
-      const aIsRoleSpecific = a.questionId.includes(selectedRole === 'networkAdmin' ? 'network' : 'cyber');
-      const bIsRoleSpecific = b.questionId.includes(selectedRole === 'networkAdmin' ? 'network' : 'cyber');
+      // Get the role-specific question prefixes
+      const rolePrefix = selectedRole === 'networkAdmin' ? 'network' : 'cyber';
+      const aIsRoleSpecific = a.questionId.toLowerCase().includes(rolePrefix);
+      const bIsRoleSpecific = b.questionId.toLowerCase().includes(rolePrefix);
       
       if (aIsRoleSpecific && !bIsRoleSpecific) return -1;
       if (!aIsRoleSpecific && bIsRoleSpecific) return 1;
@@ -315,12 +337,16 @@ export function AssessmentProvider({ children }) {
     
     const topRecommendations = recommendations.slice(0, 5);
     
+    console.log('Final recommendations:', topRecommendations);
+    
     setResults({
       successRate: finalSuccessRate,
       recommendations: topRecommendations,
       strengths: [...new Set(strengths)], // Remove any duplicates just in case
       weaknesses: [...new Set(weaknesses)] // Remove any duplicates just in case
     });
+    
+    console.log('=== RESULTS CALCULATION COMPLETE ===');
   };
 
   // Reset the assessment to initial state

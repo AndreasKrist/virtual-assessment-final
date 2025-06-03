@@ -99,7 +99,7 @@ export const networkAdminQuestions = [
     id: "networkQ1",
     text: "Do you know what Internet is and what is used for?",
     courseRecommendation: "Introduction to Internet Technologies",
-    category: "internet"
+    category: "networking" // CHANGED: was "internet", now grouped under "networking"
   },
   {
     id: "networkQ2",
@@ -193,25 +193,25 @@ export const cybersecurityQuestions = [
     id: "cyberQ6",
     text: "Have you heard of encryption?",
     courseRecommendation: "Data Encryption Fundamentals",
-    category: "encryption"
+    category: "encryption" // KEPT: This will be the main encryption category
   },
   {
     id: "cyberQ7",
     text: "Do you know what multifactor authentication means?",
     courseRecommendation: "Authentication Methods and Security",
-    category: "authentication"
+    category: "encryption" // CHANGED: was "authentication", now grouped under "encryption"
   },
   {
     id: "cyberQ8",
     text: "Do you know what a secure website looks like in your browser?",
     courseRecommendation: "Web Security Indicators",
-    category: "webSecurity"
+    category: "networking" // CHANGED: was "webSecurity", now grouped under "networking"
   },
   {
     id: "cyberQ9",
     text: "Are you familiar with what DNS is?",
     courseRecommendation: "DNS and Network Security",
-    category: "networking"
+    category: "networking" // KEPT: This stays as networking
   },
   {
     id: "cyberQ10",
