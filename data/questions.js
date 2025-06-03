@@ -63,7 +63,7 @@ export const generalQuestions = [
   },
   {
     id: "generalQ6",
-    text: "Do you know how to copy and paste function?",
+    text: "Do you know how to use copy and paste function?",
     courseRecommendation: "Computer Basics 101",
     category: "basics"
   },
@@ -109,7 +109,7 @@ export const networkAdminQuestions = [
   },
   {
     id: "networkQ3",
-    text: "Have you ever connected a device to a Wi-Fi network using a password?", //change
+    text: "Have you ever entered a password to access a Wi-Fi network?", //change
     courseRecommendation: "Wi-Fi Network Configuration Basics",
     category: "connectivity"
   },
@@ -161,7 +161,7 @@ export const networkAdminQuestions = [
 export const cybersecurityQuestions = [
   {
     id: "cyberQ1",
-    text: "Do you understand the importance of passwords?", // not sure
+    text: "Do you understand why we use passwords?",
     courseRecommendation: "Password Security Best Practices",
     category: "security"
   },
@@ -185,7 +185,7 @@ export const cybersecurityQuestions = [
   },
   {
     id: "cyberQ5",
-    text: "Have you ever heard one of these (Phishing, Malware)?",
+    text: "Have you ever heard one of these (Computer Virus, Phishing, Malware)?",
     courseRecommendation: "Common Cyber Threats and Attacks",
     category: "threats"
   },
@@ -226,7 +226,7 @@ export const roleQuestions = {
   "networkAdmin": networkAdminQuestions,
   "cybersecurity": cybersecurityQuestions
 };
-
+  
 // Course catalog with detailed information
 export const courseCatalog = {
   "Computer Basics 101": {
