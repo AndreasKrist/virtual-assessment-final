@@ -33,55 +33,55 @@ export const biodataQuestions = [
 export const generalQuestions = [
   {
     id: "generalQ1",
-    text: "Do you know how to power up/down and operate a desktop computer or laptop?",
+    text: "Do you know how to turn on/off a laptop or desktop computer?",
     courseRecommendation: "Computer Basics 101",
     category: "basics"
   },
   {
     id: "generalQ2",
-    text: "Can you use a web browser (e.g., Chrome, Edge, Firefox) to access websites or search for information online?",
+    text: "Do you know how to use a web browser (e.g., Chrome, Edge, Firefox)?",
     courseRecommendation: "Web Browsing Fundamentals",
     category: "basics" 
   },
   {
     id: "generalQ3",
-    text: "Do you know how to connect to Wi-Fi or a wired internet connection?",
+    text: "Do you know how to connect to Wi-Fi?",
     courseRecommendation: "Internet Connectivity Basics",
     category: "connectivity"
   },
   {
     id: "generalQ4",
-    text: "Can you use email to send, receive, and reply to messages (e.g., Outlook, Gmail)?",
+    text: "Do you know how to use email?",
     courseRecommendation: "Email Communication Essentials",
     category: "communication"
   },
   {
     id: "generalQ5",
-    text: "Are you comfortable creating and saving documents using Microsoft Word, Google Docs, or a similar word processor?",
+    text: "Do you know how to use Microsoft Word?",
     courseRecommendation: "Office Productivity Fundamentals",
     category: "productivity"
   },
   {
     id: "generalQ6",
-    text: "Do you know how to copy and paste text or files on a computer?",
+    text: "Do you know how to copy and paste function?",
     courseRecommendation: "Computer Basics 101",
     category: "basics"
   },
   {
     id: "generalQ7",
-    text: "Can you use a USB drive or external storage device to transfer files?",
+    text: "Do you know how to use USB drive or external storage device?",
     courseRecommendation: "File Management Essentials",
     category: "fileManagement"
   },
   {
     id: "generalQ8",
-    text: "Do you know how to install basic software (e.g., Zoom, Microsoft Office) using instructions or a setup file?",
+    text: "Do you know how to install a software (e.g., Zoom, Microsoft Office)?",
     courseRecommendation: "Software Installation and Management",
     category: "software"
   },
   {
     id: "generalQ9",
-    text: "Can you adjust simple computer settings like screen brightness, volume, or changing a desktop background?",
+    text: "Do you know how to adjust simple computer settings like screen brightness, volume, or changing a desktop background?",
     courseRecommendation: "Computer Configuration Basics",
     category: "configuration"
   },
@@ -97,19 +97,19 @@ export const generalQuestions = [
 export const networkAdminQuestions = [
   {
     id: "networkQ1",
-    text: "Do you know what Internet is and what is used for?",
+    text: "Do you know what the Internet is and what it is used for?",
     courseRecommendation: "Introduction to Internet Technologies",
     category: "networking" // CHANGED: was "internet", now grouped under "networking"
   },
   {
     id: "networkQ2",
-    text: "Do you know the difference between a wired (Ethernet) and wireless (Wi-Fi) connection?",
+    text: "Do you know the difference between wired (Ethernet) and wireless (Wi-Fi) connection?",
     courseRecommendation: "Networking Fundamentals: Connectivity Types",
     category: "connectivity"
   },
   {
     id: "networkQ3",
-    text: "Have you ever connected a device to a Wi-Fi network using a password?",
+    text: "Have you ever connected a device to a Wi-Fi network using a password?", //change
     courseRecommendation: "Wi-Fi Network Configuration Basics",
     category: "connectivity"
   },
@@ -161,7 +161,7 @@ export const networkAdminQuestions = [
 export const cybersecurityQuestions = [
   {
     id: "cyberQ1",
-    text: "Do you understand the importance of passwords?",
+    text: "Do you understand the importance of passwords?", // not sure
     courseRecommendation: "Password Security Best Practices",
     category: "security"
   },
