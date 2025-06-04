@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAssessment } from '../../contexts/AssessmentContext';
 import Button from '../ui/Button';
 import { useRouter } from 'next/router';
 
 export default function Results() {
-  const { results, biodata, selectedRole, resetAssessment } = useAssessment();
+  const { results, selectedRole, resetAssessment } = useAssessment();
   const router = useRouter();
   
   // Map role IDs to readable names

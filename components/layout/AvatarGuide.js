@@ -26,7 +26,7 @@ export default function AvatarGuide() {
     const firstName = biodata.fullName ? biodata.fullName.split(' ')[0] : 'there';
     
     if (router.pathname === '/') {
-      return `Hi ${firstName}! 👋 I noticed you're still here. To get started, please click the big blue ${createButtonText('Start Assessment')} button below. This will begin your personalized IT skills assessment!`;
+      return `Hi ${firstName}! 👋 I noticed you're still here. To get started, please click the ${createButtonText('Start Assessment')} button below. This will begin your personalized IT skills assessment!`;
     }
     
     if (router.pathname === '/results') {
@@ -45,7 +45,7 @@ export default function AvatarGuide() {
       
       case 'generalQuestions':
         if (currentBatch === 0) {
-          return `${firstName}! 💻 I notice you're looking at the general IT questions. For each question, click either ${createButtonText('Yes')} or ${createButtonText('No')} button to answer. After answering ALL questions on this page, click the blue ${createButtonText('Continue')} button at the bottom to move forward!`;
+          return `${firstName}! 💻 I notice you're looking at the general IT questions. For each question, click either ${createButtonText('Yes')} or ${createButtonText('No')} button to answer. After answering ALL questions on this page, click the  ${createButtonText('Continue')} button at the bottom to move forward!`;
         } else {
           return `${firstName}! 🌟 You're doing great! These are the final general questions. Remember to click ${createButtonText('Yes')} or ${createButtonText('No')} for each question, then click ${createButtonText('Continue')} at the bottom when you've answered everything!`;
         }
@@ -119,7 +119,7 @@ export default function AvatarGuide() {
       setAvatarExpression('welcoming');
       return `Hello ${firstName}! 👋 Welcome to ITEL's PTSA: Prelim Tech Skills Assessor! I'm your virtual assistant and I'll help you every step of the way. 
 
-🎯 **What to do now:** Click the big blue ${createButtonText('Start Assessment')} button below to begin discovering your IT potential! 
+🎯 **What to do now:** Click the ${createButtonText('Start Assessment')} button below to begin discovering your IT potential! 
 
 I'll be here throughout your journey to provide helpful tips and guidance. Let's get started! 🚀`;
     }
@@ -193,7 +193,7 @@ Ready to start this journey? I'll be with you every step of the way! 🚀`;
 2. Enter your Email Address (required) 
 3. Add your Phone Number (optional)
 4. Select your Age Group (required)
-5. Click the blue ${createButtonText('Continue')} button at the bottom
+5. Click the ${createButtonText('Continue')} button at the bottom
 
 ⚡ **Tip:** Look for the red * - those fields are required! Don't worry, your information is completely safe and secure with us. 🔒`;
       
