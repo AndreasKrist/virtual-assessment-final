@@ -108,8 +108,8 @@ export default function Home() {
               transition={{ delay: 0.2, duration: 0.7 }}
             >
               <span className="relative inline-block">
-                <span className="block sm:inline">Prelim Tech Skills</span>
-                <span className="block sm:inline"> Assessor (PTSA)</span>
+                <span className="block sm:inline">PTSA: Prelim Tech </span>
+                <span className="block sm:inline">Skills Assessor</span>
                 <motion.span 
                   className="absolute -bottom-2 left-0 w-full h-1 bg-blue-500"
                   initial={{ width: 0 }}
@@ -145,7 +145,7 @@ export default function Home() {
                 transition={{ delay: 0.8, duration: 0.5 }}
               >
                 <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-blue-900">
-                  Welcome to ITEL&apos;s Prelim Tech Skills Assessor (PTSA)! 👋
+                  Welcome to ITEL&apos;s PTSA: Prelim Tech Skills Assessor! 👋
                 </h2>
                 <p className="text-base sm:text-lg text-blue-700 mb-4">
                   {/* This assessment helps you discover your potential in Tech and provides personalized course recommendations to boost your career. */}

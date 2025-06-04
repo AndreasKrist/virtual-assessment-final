@@ -30,7 +30,7 @@ export default function AvatarGuide() {
     }
     
     if (router.pathname === '/results') {
-      return `${firstName}, don't forget to save your results! 💾 Scroll down and click the ${createButtonText('Save My Results')} button to store your assessment. You can also click ${createButtonText('Start Over')} if you want to take the assessment again.`;
+      return `${firstName}, congratulations on completing your assessment! 🎉 Your results have been automatically saved to our database. You can click ${createButtonText('Start Over')} if you want to take the assessment again or explore different career paths.`;
     }
     
     switch (stage) {
@@ -55,7 +55,7 @@ export default function AvatarGuide() {
         if (currentBatch === 0) {
           return `${firstName}! 🎯 Now you're on the ${roleName} questions - excellent choice! Click ${createButtonText('Yes')} or ${createButtonText('No')} for each question based on your knowledge. Don't worry if you don't know something - that's normal! Click ${createButtonText('Continue')} when all questions are answered.`;
         } else {
-          return `${firstName}! 🏁 These are your final ${roleName} questions - you're almost done! Answer each question with ${createButtonText('Yes')} or ${createButtonText('No')}, then click ${createButtonText('Continue')} to see your personalized results!`;
+          return `${firstName}! 🏁 These are your final ${roleName} questions - you're almost done! Answer each question with ${createButtonText('Yes')} or ${createButtonText('No')}, then click ${createButtonText('Continue')} to automatically save your results and see your personalized summary!`;
         }
       
       default:
@@ -117,7 +117,7 @@ export default function AvatarGuide() {
     
     if (router.pathname === '/') {
       setAvatarExpression('welcoming');
-      return `Hello ${firstName}! 👋 Welcome to ITEL's Tech Skills Assessment! I'm your personal guide and I'll help you every step of the way. 
+      return `Hello ${firstName}! 👋 Welcome to ITEL's PTSA: Prelim Tech Skills Assessor! I'm your virtual assistant and I'll help you every step of the way. 
 
 🎯 **What to do now:** Click the big blue ${createButtonText('Start Assessment')} button below to begin discovering your IT potential! 
 
@@ -132,10 +132,12 @@ I'll be here throughout your journey to provide helpful tips and guidance. Let's
 
 🎉 **What this means:** You have excellent potential in your chosen field!
 
+✅ **Great news:** Your results have been automatically saved to our database!
+
 📋 **What to do now:** 
 1. Review your personalized recommendations below
-2. Click ${createButtonText('Save My Results')} to store your assessment
-3. Contact ITEL about the recommended courses
+2. Contact ITEL about the recommended courses
+3. You can click ${createButtonText('Start Over')} to explore other career paths
 
 You're on a great path to IT success! 🚀`;
       } else if (successRate >= 60) {
@@ -144,10 +146,12 @@ You're on a great path to IT success! 🚀`;
 
 💪 **What this means:** You have a solid foundation to build upon!
 
+✅ **Great news:** Your results have been automatically saved to our database!
+
 📋 **What to do now:**
 1. Check your course recommendations below - they're designed just for you!
-2. Click ${createButtonText('Save My Results')} to keep your assessment
-3. Don't worry about areas you're unfamiliar with - that's why we have courses!
+2. Don't worry about areas you're unfamiliar with - that's why we have courses!
+3. Click ${createButtonText('Start Over')} if you want to explore other paths
 
 Every expert was once a beginner! 🌟`;
       } else {
@@ -156,10 +160,12 @@ Every expert was once a beginner! 🌟`;
 
 🌱 **What this means:** You have great potential - you just need the right training!
 
+✅ **Great news:** Your results have been automatically saved to our database!
+
 📋 **What to do now:**
 1. Look at your personalized course recommendations below
-2. Click ${createButtonText('Save My Results')} so we can help you further
-3. Remember: Every IT expert started exactly where you are now!
+2. Remember: Every IT expert started exactly where you are now!
+3. Click ${createButtonText('Start Over')} to try a different career path
 
 The courses I've recommended will build your confidence and skills step by step! 🚀`;
       }
@@ -174,7 +180,7 @@ The courses I've recommended will build your confidence and skills step by step!
 1. First, I'll ask for some basic information about you
 2. Then you'll choose between Network Administration or Cybersecurity  
 3. We'll go through some simple Yes/No questions
-4. Finally, you'll get personalized course recommendations!
+4. Finally, you'll get personalized course recommendations - all automatically saved!
 
 Ready to start this journey? I'll be with you every step of the way! 🚀`;
       
@@ -251,9 +257,9 @@ Which one calls to you? 🤔`;
 1. Answer these last questions with ${createButtonText('Yes')} or ${createButtonText('No')}
 2. Be honest about your current knowledge
 3. Answer every single question
-4. Click ${createButtonText('Continue')} to see your personalized results!
+4. Click ${createButtonText('Continue')} to automatically save and see your results!
 
-🎉 **You're about to see:** Your success rate, your strengths, areas to improve, and custom course recommendations just for you! Exciting! 🌟`;
+🎉 **You're about to see:** Your success rate, your strengths, areas to improve, and custom course recommendations just for you! Your results will be automatically saved to our database! Exciting! 🌟`;
         }
       
       case 'results':
@@ -264,9 +270,10 @@ Which one calls to you? 🤔`;
 ✅ Completed your personal IT skills assessment
 ✅ Discovered your strengths and growth areas  
 ✅ Received personalized course recommendations
+✅ Your results have been automatically saved to our database!
 ✅ Taken the first step toward your IT career!
 
-🎯 **Next steps:** Review your results, save them, and consider the recommended courses. I'm so proud of you for taking this important step toward your future! 🌟`;
+🎯 **Next steps:** Review your results and consider the recommended courses. I'm so proud of you for taking this important step toward your future! 🌟`;
       
       default:
         setAvatarExpression('happy');
@@ -398,7 +405,7 @@ Which one calls to you? 🤔`;
           >
             <div className="bg-white rounded-2xl shadow-xl border border-blue-200 p-6 relative">
               <div className="flex justify-between items-start mb-2">
-                <h4 className="text-base font-semibold text-blue-800">Your Virtual Assistant 🤖</h4>
+                <h4 className="text-base font-semibold text-blue-800">Virtual Assistant 🤖</h4>
                 <button
                   onClick={() => {
                     setShowMessage(false);
@@ -509,7 +516,7 @@ Which one calls to you? 🤔`;
             ease: "easeInOut"
           }}
         >
-          💬 Click the Virtual Assistant!
+          💬 Click here Virtual Assistant!
         </motion.div>
       )}
     </div>

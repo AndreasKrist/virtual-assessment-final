@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import { useAssessment } from '../../contexts/AssessmentContext';
 import Button from '../ui/Button';
-import { saveUserData } from '../../lib/saveUserData';
-import { saveToGoogleSheet } from '../../lib/googleSheets';
 import { useRouter } from 'next/router';
 
 export default function Results() {
   const { results, biodata, selectedRole, resetAssessment } = useAssessment();
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState(null);
   const router = useRouter();
   
   // Map role IDs to readable names
@@ -31,54 +27,6 @@ export default function Results() {
   };
   
   const successRateInfo = getSuccessRateInfo(results.successRate);
-  
-  // Handle saving results
-  const handleSaveResults = async () => {
-    setIsSaving(true);
-    
-    try {
-      // Create a results object with the most important data
-      const resultsData = {
-        role: selectedRole,
-        roleName: roleNames[selectedRole],
-        successRate: results.successRate,
-        strengths: results.strengths,
-        weaknesses: results.weaknesses,
-        recommendations: results.recommendations.map(rec => 
-          typeof rec === 'string' ? rec : rec.courseName
-        )
-      };
-      
-      // Save user data to localStorage as a backup
-      await saveUserData(biodata, resultsData);
-      
-      // Save to Google Sheets
-      const sheetsResponse = await saveToGoogleSheet({
-        ...biodata, 
-        results: resultsData
-      });
-      
-      if (sheetsResponse.success) {
-        setSaveStatus({ 
-          type: 'success', 
-          message: 'Results saved successfully to our Database!' 
-        });
-      } else {
-        setSaveStatus({ 
-          type: 'error', 
-          message: 'Error saving to our Database. Please try again.' 
-        });
-      }
-    } catch (error) {
-      console.error('Error saving results:', error);
-      setSaveStatus({ 
-        type: 'error', 
-        message: 'An unexpected error occurred.' 
-      });
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
   const handleStartOver = () => {
     resetAssessment();
@@ -95,13 +43,6 @@ export default function Results() {
             Based on your responses, here's your assessment summary analysis
           </p>
         </div>
-
-        {/* Clear Instructions */}
-        {/* <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <p className="text-blue-700 text-center text-sm">
-            🎉 <strong>Congratulations!</strong> Review your results below. Don't forget to <strong>"Save My Results"</strong> at the bottom to store your assessment!
-          </p>
-        </div> */}
         
         {/* MAIN CONTENT - No tabs, just the overview content */}
         <div>
@@ -110,9 +51,6 @@ export default function Results() {
               <div className="flex flex-col items-center space-y-4 sm:space-y-0 sm:flex-row sm:justify-between">
                 <div className="text-center sm:text-left">
                   <h3 className="text-base sm:text-lg font-semibold mb-1 text-blue-800">Here is your preliminary level of understanding in the area of {roleNames[selectedRole]}</h3>
-                  {/* <p className="text-blue-600 text-sm sm:text-base">
-                    {successRateInfo.message}
-                  </p> */}
                 </div>
                 <div className="w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center rounded-full border-4 sm:border-8 border-blue-100 flex-shrink-0">
                   <div className={`text-2xl sm:text-3xl font-bold ${
@@ -188,29 +126,8 @@ export default function Results() {
           </div>
         </div>
         
-        {/* Status Message */}
-        {saveStatus && (
-          <div className={`mt-4 p-3 rounded-lg text-xs sm:text-sm ${saveStatus.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-            {saveStatus.message}
-          </div>
-        )}
-        
-        {/* Actions - Mobile Optimized - BOTH BUTTONS AT BOTTOM */}
-        <div className="flex flex-col items-center mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-blue-100">
-          <div className="text-center mb-4 w-full">
-            <Button 
-              onClick={handleSaveResults}
-              disabled={isSaving}
-              className="w-full sm:w-auto px-8 py-3 mb-2"
-            >
-              {isSaving ? 'Saving...' : 'Save My Results'}
-            </Button>
-            <p className="text-xs text-blue-600">
-              👆 Click "Save My Results" to store your assessment in our database
-            </p>
-          </div>
-          
-          {/* Start Over button */}
+        {/* Actions - Only Start Over button now */}
+        <div className="flex justify-center mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-blue-100">
           <div className="text-center w-full">
             <Button 
               variant="outline" 
@@ -285,7 +202,7 @@ export default function Results() {
           </div>
         ) : (
           <div className="text-center p-6 sm:p-8 bg-blue-50 rounded-lg border border-blue-100">
-            <p className="text-blue-600 text-sm sm:text-base">
+            <p className="text-blue-600 text-base sm:text-lg">
               No specific course recommendations at this time.
             </p>
           </div>

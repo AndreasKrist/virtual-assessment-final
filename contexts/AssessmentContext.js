@@ -339,14 +339,19 @@ export function AssessmentProvider({ children }) {
     
     console.log('Final recommendations:', topRecommendations);
     
-    setResults({
+    const calculatedResults = {
       successRate: finalSuccessRate,
       recommendations: topRecommendations,
       strengths: [...new Set(strengths)], // Remove any duplicates just in case
       weaknesses: [...new Set(weaknesses)] // Remove any duplicates just in case
-    });
+    };
+
+    setResults(calculatedResults);
     
     console.log('=== RESULTS CALCULATION COMPLETE ===');
+    
+    // Return the results for external use (like in QuestionBatch)
+    return calculatedResults;
   };
 
   // Reset the assessment to initial state
@@ -423,6 +428,7 @@ export function AssessmentProvider({ children }) {
     getCurrentBatch,
     getBatchProgress,
     getRoleName,
+    calculateResults, // ADDED: Now exposed for external use
     // Keep these for backward compatibility with existing components
     getCurrentQuestion: () => {
       // This is mainly for the old QuestionCard component if still used

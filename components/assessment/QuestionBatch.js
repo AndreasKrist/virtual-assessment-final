@@ -3,6 +3,8 @@ import { useAssessment } from '../../contexts/AssessmentContext';
 import Button from '../ui/Button';
 import ProgressBar from './ProgressBar';
 import { useRouter } from 'next/router';
+import { saveUserData } from '../../lib/saveUserData';
+import { saveToGoogleSheet } from '../../lib/googleSheets';
 
 export default function QuestionBatch() {
   const { 
@@ -16,7 +18,9 @@ export default function QuestionBatch() {
     currentBatch,
     selectedRole,
     goBackToRoleSelection,
-    resetAssessment
+    resetAssessment,
+    biodata,
+    calculateResults // Make sure this is imported
   } = useAssessment();
   
   const questions = getCurrentBatch();
@@ -24,6 +28,7 @@ export default function QuestionBatch() {
   const [batchAnswers, setBatchAnswers] = useState({});
   const [showExplanations, setShowExplanations] = useState({});
   const [showCategoryConfirm, setShowCategoryConfirm] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
   
   // Scroll to top when component mounts or batch changes
@@ -99,8 +104,73 @@ export default function QuestionBatch() {
       [questionId]: !prev[questionId]
     }));
   };
+
+  // Check if this is the final batch (last questions)
+  const isFinalBatch = () => {
+    return currentQuestionSet === 'roleSpecific' && currentBatch === 1;
+  };
+
+  // Auto-save function for final batch
+  const handleAutoSave = async (allAnswers) => {
+    if (!isFinalBatch()) return;
+
+    setIsSaving(true);
+    
+    try {
+      // First record the final answers
+      recordBatchAnswers(allAnswers);
+      
+      // Calculate results using the context function
+      const calculatedResults = calculateResults();
+      
+      // Save in background without showing status to user
+      setTimeout(async () => {
+        try {
+          // Map role IDs to readable names
+          const roleNames = {
+            networkAdmin: "Network Administrator",
+            cybersecurity: "Cybersecurity"
+          };
+          
+          const resultsForSaving = {
+            role: selectedRole,
+            roleName: roleNames[selectedRole],
+            successRate: calculatedResults.successRate,
+            strengths: calculatedResults.strengths,
+            weaknesses: calculatedResults.weaknesses,
+            recommendations: calculatedResults.recommendations.map(rec => 
+              typeof rec === 'string' ? rec : rec.courseName
+            )
+          };
+          
+          // Save user data to localStorage as a backup
+          await saveUserData(biodata, resultsForSaving);
+          
+          // Save to Google Sheets (in background)
+          await saveToGoogleSheet({
+            ...biodata, 
+            results: resultsForSaving
+          });
+          
+        } catch (error) {
+          console.error('Background save error:', error);
+          // Continue silently - don't show error to user
+        }
+      }, 100);
+      
+      // Continue to next stage immediately
+      nextStage();
+      
+    } catch (error) {
+      console.error('Error in auto-save:', error);
+      // Still continue to next stage even if save fails
+      nextStage();
+    } finally {
+      setIsSaving(false);
+    }
+  };
   
-  const handleNext = () => {
+  const handleNext = async () => {
     const allAnswers = getCurrentAnswers();
     
     // Check if all questions are answered
@@ -115,15 +185,20 @@ export default function QuestionBatch() {
       return;
     }
     
-    // Record all answers for this batch
-    recordBatchAnswers(allAnswers);
-    
-    // Reset local state for next batch
-    setBatchAnswers({});
-    setShowExplanations({});
-    
-    // Move to next stage
-    nextStage();
+    // If this is the final batch, auto-save before proceeding
+    if (isFinalBatch()) {
+      await handleAutoSave(allAnswers);
+    } else {
+      // Record all answers for this batch
+      recordBatchAnswers(allAnswers);
+      
+      // Reset local state for next batch
+      setBatchAnswers({});
+      setShowExplanations({});
+      
+      // Move to next stage
+      nextStage();
+    }
   };
   
   const allAnswered = () => {
@@ -333,6 +408,7 @@ export default function QuestionBatch() {
               variant="secondary" 
               onClick={prevStage}
               className="w-full sm:w-auto px-8 py-3 min-h-[48px] mb-2"
+              disabled={isSaving}
             >
               Back
             </Button>
@@ -349,16 +425,16 @@ export default function QuestionBatch() {
             )}
             <Button 
               onClick={handleNext}
-              disabled={!allAnswered()}
-              className={`w-full sm:w-auto px-8 py-3 min-h-[48px] mb-2 ${allAnswered() ? 'shadow-lg shadow-blue-500/20' : ''}`}
+              disabled={!allAnswered() || isSaving}
+              className={`w-full sm:w-auto px-8 py-3 min-h-[48px] mb-2 ${allAnswered() && !isSaving ? 'shadow-lg shadow-blue-500/20' : ''}`}
               id="continue-button"
             >
-              {progress.current === progress.total ? 'Continue' : 'Continue'}
+              {isSaving ? 'Saving...' : 'Continue'}
             </Button>
             <p className="text-xs text-blue-600 text-center">
-              {allAnswered() 
-                ? "👆 Click 'Continue' to move to the next section" 
-                : "👆 Answer all questions above first"
+              {isSaving ? "📤 Processing..." :
+               !allAnswered() ? "👆 Answer all questions above first" :
+               "👆 Click 'Continue' to move to the next section"
               }
             </p>
           </div>
