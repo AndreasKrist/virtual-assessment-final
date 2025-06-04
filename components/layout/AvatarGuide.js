@@ -528,7 +528,7 @@ Which one calls to you? 🤔`;
             ease: "easeInOut"
           }}
         >
-          💬 Click here Virtual Assistant!
+          💬 Click here for Virtual Assistant!
         </motion.div>
       )}
     </div>

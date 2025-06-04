@@ -49,8 +49,8 @@ export default function Results() {
           <div className="mb-6 sm:mb-8">
             <div className="mb-4 sm:mb-6 p-4 sm:p-6 rounded-lg bg-blue-50 border border-blue-100">
               <div className="flex flex-col items-center space-y-4 sm:space-y-0 sm:flex-row sm:justify-between">
-                <div className="text-center sm:text-left">
-                  <h3 className="text-base sm:text-lg font-semibold mb-1 text-blue-800">Here is your preliminary level of understanding in the area of {roleNames[selectedRole]}</h3>
+                <div className="text-center sm:text-left flex-1">
+                  <h3 className="text-sm sm:text-base font-semibold mb-1 text-blue-800 leading-tight">Here is your preliminary level of understanding in the area of {roleNames[selectedRole]}</h3>
                 </div>
                 <div className="w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center rounded-full border-4 sm:border-8 border-blue-100 flex-shrink-0">
                   <div className={`text-2xl sm:text-3xl font-bold ${
