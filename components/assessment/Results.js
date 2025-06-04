@@ -97,11 +97,11 @@ export default function Results() {
         </div>
 
         {/* Clear Instructions */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        {/* <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
           <p className="text-blue-700 text-center text-sm">
             🎉 <strong>Congratulations!</strong> Review your results below. Don't forget to <strong>"Save My Results"</strong> at the bottom to store your assessment!
           </p>
-        </div>
+        </div> */}
         
         {/* MAIN CONTENT - No tabs, just the overview content */}
         <div>
@@ -109,10 +109,10 @@ export default function Results() {
             <div className="mb-4 sm:mb-6 p-4 sm:p-6 rounded-lg bg-blue-50 border border-blue-100">
               <div className="flex flex-col items-center space-y-4 sm:space-y-0 sm:flex-row sm:justify-between">
                 <div className="text-center sm:text-left">
-                  <h3 className="text-base sm:text-lg font-semibold mb-1 text-blue-800">Unlock your potential with {roleNames[selectedRole]}</h3>
-                  <p className="text-blue-600 text-sm sm:text-base">
+                  <h3 className="text-base sm:text-lg font-semibold mb-1 text-blue-800">Here is your preliminary level of understanding in the area of {roleNames[selectedRole]}</h3>
+                  {/* <p className="text-blue-600 text-sm sm:text-base">
                     {successRateInfo.message}
-                  </p>
+                  </p> */}
                 </div>
                 <div className="w-24 h-24 sm:w-32 sm:h-32 flex items-center justify-center rounded-full border-4 sm:border-8 border-blue-100 flex-shrink-0">
                   <div className={`text-2xl sm:text-3xl font-bold ${
@@ -183,7 +183,7 @@ export default function Results() {
           
           <div className="mt-6 sm:mt-8 p-3 sm:p-4 bg-blue-50 rounded-lg border border-blue-100">
             <p className="text-blue-700 text-xs sm:text-sm">
-              <span className="font-semibold">Next Steps:</span> We recommend contacting us to inquire about specific courses that can help you succeed in your chosen career path.
+              <span className="font-semibold"></span> Please feel free to contact ITEL to inquire about specific courses that can help you succeed in your chosen career path.
             </p>
           </div>
         </div>

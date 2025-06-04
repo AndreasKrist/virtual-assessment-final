@@ -149,8 +149,8 @@ export default function Home() {
                 </h2>
                 <p className="text-base sm:text-lg text-blue-700 mb-4">
                   {/* This assessment helps you discover your potential in Tech and provides personalized course recommendations to boost your career. */}
-                  This assessment is your first step to discovering if a career in Network Administration or Cybersecurity is right for you.
-                  We'll assess your skills and recommend personalized courses to help you achieve your goals.
+                  This assessment is your first step towards discovering a possible carrer in Tech.
+                  {/* We'll assess your skills and recommend personalized courses to help you achieve your goals. */}
                 </p>
                 <p className="text-sm sm:text-base text-blue-600">
                   {/* Whether you&apos;re just starting out or looking to advance your skills, we&apos;ll guide you toward the right learning path based on your current knowledge and discipline. */}
@@ -275,7 +275,7 @@ export default function Home() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1.4, duration: 0.5 }}
                 >
-                  Takes only 3-5 minutes to complete
+                  This assessment will take only between 3 to 5 minutes to complete
                 </motion.p>
               </motion.div>
             </div>

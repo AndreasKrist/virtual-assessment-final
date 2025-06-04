@@ -393,7 +393,7 @@ Which one calls to you? 🤔`;
           >
             <div className="bg-white rounded-2xl shadow-xl border border-blue-200 p-6 relative">
               <div className="flex justify-between items-start mb-2">
-                <h4 className="text-base font-semibold text-blue-800">Your Personal Guide 🤖</h4>
+                <h4 className="text-base font-semibold text-blue-800">Your Virtual Assistant 🤖</h4>
                 <button
                   onClick={() => {
                     setShowMessage(false);
@@ -506,7 +506,7 @@ Which one calls to you? 🤔`;
             ease: "easeInOut"
           }}
         >
-          💬 Click for help!
+          💬 Click for Virtual Assistant!
         </motion.div>
       )}
     </div>
