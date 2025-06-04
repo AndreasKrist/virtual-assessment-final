@@ -353,7 +353,7 @@ export default function QuestionBatch() {
               className={`w-full sm:w-auto px-8 py-3 min-h-[48px] mb-2 ${allAnswered() ? 'shadow-lg shadow-blue-500/20' : ''}`}
               id="continue-button"
             >
-              {progress.current === progress.total ? 'See Results' : 'Continue'}
+              {progress.current === progress.total ? 'Continue' : 'Continue'}
             </Button>
             <p className="text-xs text-blue-600 text-center">
               {allAnswered() 

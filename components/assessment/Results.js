@@ -14,7 +14,7 @@ export default function Results() {
   // Map role IDs to readable names
   const roleNames = {
     networkAdmin: "Network Administrator",
-    cybersecurity: "Cybersecurity Specialist"
+    cybersecurity: "Cybersecurity"
   };
   
   // Determine success rate color and message

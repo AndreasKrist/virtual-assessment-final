@@ -16,47 +16,52 @@ export default function AvatarGuide() {
   const [userClosedMessage, setUserClosedMessage] = useState(false);
   const lastStageRef = useRef(stage);
   
+  // Helper function to create button-like styling in messages
+  const createButtonText = (text) => {
+    return `<span style="display: inline-block; background: #2563eb; color: white; padding: 4px 12px; border-radius: 8px; font-weight: 500; font-size: 14px;">${text}</span>`;
+  };
+  
   // Get help message when user is inactive
   const getHelpMessage = useCallback(() => {
     const firstName = biodata.fullName ? biodata.fullName.split(' ')[0] : 'there';
     
     if (router.pathname === '/') {
-      return `Hi ${firstName}! 👋 I noticed you're still here. To get started, please click the big blue "Start Assessment" button below. This will begin your personalized IT skills assessment!`;
+      return `Hi ${firstName}! 👋 I noticed you're still here. To get started, please click the big blue ${createButtonText('Start Assessment')} button below. This will begin your personalized IT skills assessment!`;
     }
     
     if (router.pathname === '/results') {
-      return `${firstName}, don't forget to save your results! 💾 Scroll down and click the "Save My Results" button to store your assessment. You can also click "Start Over" if you want to take the assessment again.`;
+      return `${firstName}, don't forget to save your results! 💾 Scroll down and click the ${createButtonText('Save My Results')} button to store your assessment. You can also click ${createButtonText('Start Over')} if you want to take the assessment again.`;
     }
     
     switch (stage) {
       case 'welcome':
-        return `${firstName}, let's get started! 🌟 Click the "Start Assessment" button to begin your journey into IT career discovery!`;
+        return `${firstName}, let's get started! 🌟 Click the ${createButtonText('Start Assessment')} button to begin your journey into IT career discovery!`;
       
       case 'biodata':
-        return `${firstName}! 📝 I see you're on the information page. Please fill in all the required fields (marked with red *), then click the "Continue" button at the bottom to move to the next step. Don't worry, your information is safe with us!`;
+        return `${firstName}! 📝 I see you're on the information page. Please fill in all the required fields (marked with red *), then click the ${createButtonText('Continue')} button at the bottom to move to the next step. Don't worry, your information is safe with us!`;
       
       case 'roleSelection':
-        return `${firstName}! 🎯 I see you need to choose your discipline. Click on either "Network Administrator" or "Cybersecurity" - the box will turn blue when selected. Then click the "Continue" button at the bottom to proceed with your chosen path!`;
+        return `${firstName}! 🎯 I see you need to choose your discipline. Click on either "Network Administrator" or "Cybersecurity" - the box will turn blue when selected. Then click the ${createButtonText('Continue')} button at the bottom to proceed with your chosen path!`;
       
       case 'generalQuestions':
         if (currentBatch === 0) {
-          return `${firstName}! 💻 I notice you're looking at the general IT questions. For each question, click either "Yes" or "No" button to answer. After answering ALL questions on this page, click the blue "Continue" button at the bottom to move forward!`;
+          return `${firstName}! 💻 I notice you're looking at the general IT questions. For each question, click either ${createButtonText('Yes')} or ${createButtonText('No')} button to answer. After answering ALL questions on this page, click the blue ${createButtonText('Continue')} button at the bottom to move forward!`;
         } else {
-          return `${firstName}! 🌟 You're doing great! These are the final general questions. Remember to click "Yes" or "No" for each question, then click "Continue" at the bottom when you've answered everything!`;
+          return `${firstName}! 🌟 You're doing great! These are the final general questions. Remember to click ${createButtonText('Yes')} or ${createButtonText('No')} for each question, then click ${createButtonText('Continue')} at the bottom when you've answered everything!`;
         }
       
       case 'roleQuestions':
         const roleName = selectedRole === 'networkAdmin' ? 'Network Administration' : 'Cybersecurity';
         if (currentBatch === 0) {
-          return `${firstName}! 🎯 Now you're on the ${roleName} questions - excellent choice! Click "Yes" or "No" for each question based on your knowledge. Don't worry if you don't know something - that's normal! Click "Continue" when all questions are answered.`;
+          return `${firstName}! 🎯 Now you're on the ${roleName} questions - excellent choice! Click ${createButtonText('Yes')} or ${createButtonText('No')} for each question based on your knowledge. Don't worry if you don't know something - that's normal! Click ${createButtonText('Continue')} when all questions are answered.`;
         } else {
-          return `${firstName}! 🏁 These are your final ${roleName} questions - you're almost done! Answer each question with "Yes" or "No", then click "Continue" to see your personalized results!`;
+          return `${firstName}! 🏁 These are your final ${roleName} questions - you're almost done! Answer each question with ${createButtonText('Yes')} or ${createButtonText('No')}, then click ${createButtonText('Continue')} to see your personalized results!`;
         }
       
       default:
         return `${firstName}! 😊 I'm here to help guide you through the assessment. If you need assistance, just click on me anytime! Remember to click buttons as instructed to move through each step.`;
     }
-  }, [biodata.fullName, router.pathname, stage, currentBatch, selectedRole]);
+  }, [biodata.fullName, router.pathname, stage, currentBatch, selectedRole, createButtonText]);
   
   // Reset inactivity timer whenever user interacts
   const resetInactivityTimer = useCallback(() => {
@@ -114,7 +119,7 @@ export default function AvatarGuide() {
       setAvatarExpression('welcoming');
       return `Hello ${firstName}! 👋 Welcome to ITEL's Tech Skills Assessment! I'm your personal guide and I'll help you every step of the way. 
 
-🎯 **What to do now:** Click the big blue "Start Assessment" button below to begin discovering your IT potential! 
+🎯 **What to do now:** Click the big blue ${createButtonText('Start Assessment')} button below to begin discovering your IT potential! 
 
 I'll be here throughout your journey to provide helpful tips and guidance. Let's get started! 🚀`;
     }
@@ -129,7 +134,7 @@ I'll be here throughout your journey to provide helpful tips and guidance. Let's
 
 📋 **What to do now:** 
 1. Review your personalized recommendations below
-2. Click "Save My Results" to store your assessment
+2. Click ${createButtonText('Save My Results')} to store your assessment
 3. Contact ITEL about the recommended courses
 
 You're on a great path to IT success! 🚀`;
@@ -141,7 +146,7 @@ You're on a great path to IT success! 🚀`;
 
 📋 **What to do now:**
 1. Check your course recommendations below - they're designed just for you!
-2. Click "Save My Results" to keep your assessment
+2. Click ${createButtonText('Save My Results')} to keep your assessment
 3. Don't worry about areas you're unfamiliar with - that's why we have courses!
 
 Every expert was once a beginner! 🌟`;
@@ -153,7 +158,7 @@ Every expert was once a beginner! 🌟`;
 
 📋 **What to do now:**
 1. Look at your personalized course recommendations below
-2. Click "Save My Results" so we can help you further
+2. Click ${createButtonText('Save My Results')} so we can help you further
 3. Remember: Every IT expert started exactly where you are now!
 
 The courses I've recommended will build your confidence and skills step by step! 🚀`;
@@ -182,7 +187,7 @@ Ready to start this journey? I'll be with you every step of the way! 🚀`;
 2. Enter your Email Address (required) 
 3. Add your Phone Number (optional)
 4. Select your Age Group (required)
-5. Click the blue "Continue" button at the bottom
+5. Click the blue ${createButtonText('Continue')} button at the bottom
 
 ⚡ **Tip:** Look for the red * - those fields are required! Don't worry, your information is completely safe and secure with us. 🔒`;
       
@@ -193,7 +198,7 @@ Ready to start this journey? I'll be with you every step of the way! 🚀`;
 🎯 **What to do here:**
 1. Read about both options: Network Administrator and Cybersecurity
 2. Click on the box of your preferred choice (it will turn blue)
-3. Click the "Continue" button at the bottom
+3. Click the ${createButtonText('Continue')} button at the bottom
 
 💡 **Don't worry about choosing "wrong"** - both are fantastic careers! Pick the one that sounds more interesting to you. You can always change your mind later! 
 
@@ -206,10 +211,10 @@ Which one calls to you? 🤔`;
 
 📋 **How to answer these questions:**
 1. Read each question carefully
-2. Click "Yes" if you can do it, "No" if you can't
+2. Click ${createButtonText('Yes')} if you can do it, ${createButtonText('No')} if you can't
 3. Be honest - there are no wrong answers!
-4. If you click "No", you can click "Learn more" to see how we can help
-5. After answering ALL questions, click "Continue" at the bottom
+4. If you click ${createButtonText('No')}, you can click "Learn more" to see how we can help
+5. After answering ALL questions, click ${createButtonText('Continue')} at the bottom
 
 ⚡ **Important:** Answer every single question before clicking Continue. Take your time! 🕐`;
         } else {
@@ -217,10 +222,10 @@ Which one calls to you? 🤔`;
           return `You're doing amazing, ${firstName}! 🌟 These are the final general questions.
 
 📋 **What to do:**
-1. Continue answering "Yes" or "No" to each question
+1. Continue answering ${createButtonText('Yes')} or ${createButtonText('No')} to each question
 2. Remember, honesty helps us give you better recommendations
 3. Answer every question on this page
-4. Click "Continue" when you're completely done
+4. Click ${createButtonText('Continue')} when you're completely done
 
 🎉 **You're halfway through!** After this, we'll move to your specialized questions. Keep going! 💪`;
         }
@@ -233,9 +238,9 @@ Which one calls to you? 🤔`;
 
 📋 **What to do here:**
 1. These questions are about your chosen field: ${roleName}
-2. Click "Yes" if you know/can do it, "No" if you don't
-3. Don't worry if you answer "No" to many - that's totally normal!
-4. Answer ALL questions, then click "Continue"
+2. Click ${createButtonText('Yes')} if you know/can do it, ${createButtonText('No')} if you don't
+3. Don't worry if you answer ${createButtonText('No')} to many - that's totally normal!
+4. Answer ALL questions, then click ${createButtonText('Continue')}
 
 💡 **Remember:** We're not testing you - we're learning how to help you succeed! Be honest so we can recommend the perfect courses. 🎓`;
         } else {
@@ -243,10 +248,10 @@ Which one calls to you? 🤔`;
           return `Almost there, ${firstName}! 🏁 These are your final ${roleName} questions!
 
 📋 **Final steps:**
-1. Answer these last questions with "Yes" or "No"
+1. Answer these last questions with ${createButtonText('Yes')} or ${createButtonText('No')}
 2. Be honest about your current knowledge
 3. Answer every single question
-4. Click "Continue" to see your personalized results!
+4. Click ${createButtonText('Continue')} to see your personalized results!
 
 🎉 **You're about to see:** Your success rate, your strengths, areas to improve, and custom course recommendations just for you! Exciting! 🌟`;
         }
@@ -271,7 +276,7 @@ Which one calls to you? 🤔`;
 
 🚀 **Remember:** There are no wrong answers - we're here to discover how to help you succeed in IT!`;
     }
-  }, [biodata.fullName, router.pathname, stage, currentBatch, selectedRole, results.successRate]);
+  }, [biodata.fullName, router.pathname, stage, currentBatch, selectedRole, results.successRate, createButtonText]);
   
   // Different avatar expressions
   const getAvatarExpression = () => {
@@ -381,7 +386,7 @@ Which one calls to you? 🤔`;
   }
   
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 right-20 z-50">
       {/* Message Bubble - Much Wider and Better Positioned */}
       <AnimatePresence>
         {showMessage && (
@@ -407,9 +412,7 @@ Which one calls to you? 🤔`;
                   </svg>
                 </button>
               </div>
-              <div className="text-sm text-blue-700 leading-relaxed whitespace-pre-line">
-                {currentMessage}
-              </div>
+              <div className="text-sm text-blue-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: currentMessage.replace(/\n/g, '<br>') }} />
               {/* Speech bubble tail */}
               <div className="absolute bottom-0 right-12 transform translate-y-full">
                 <div className="w-0 h-0 border-l-10 border-r-10 border-t-10 border-l-transparent border-r-transparent border-t-white"></div>
@@ -506,7 +509,7 @@ Which one calls to you? 🤔`;
             ease: "easeInOut"
           }}
         >
-          💬 Click for Virtual Assistant!
+          💬 Click the Virtual Assistant!
         </motion.div>
       )}
     </div>
