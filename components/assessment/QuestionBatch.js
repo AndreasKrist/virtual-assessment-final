@@ -109,66 +109,6 @@ export default function QuestionBatch() {
   const isFinalBatch = () => {
     return currentQuestionSet === 'roleSpecific' && currentBatch === 1;
   };
-
-  // Auto-save function for final batch
-  const handleAutoSave = async (allAnswers) => {
-    if (!isFinalBatch()) return;
-
-    setIsSaving(true);
-    
-    try {
-      // First record the final answers
-      recordBatchAnswers(allAnswers);
-      
-      // Calculate results using the context function
-      const calculatedResults = calculateResults();
-      
-      // Save in background without showing status to user
-      setTimeout(async () => {
-        try {
-          // Map role IDs to readable names
-          const roleNames = {
-            networkAdmin: "Network Administrator",
-            cybersecurity: "Cybersecurity"
-          };
-          
-          const resultsForSaving = {
-            role: selectedRole,
-            roleName: roleNames[selectedRole],
-            successRate: calculatedResults.successRate,
-            strengths: calculatedResults.strengths,
-            weaknesses: calculatedResults.weaknesses,
-            recommendations: calculatedResults.recommendations.map(rec => 
-              typeof rec === 'string' ? rec : rec.courseName
-            )
-          };
-          
-          // Save user data to localStorage as a backup
-          await saveUserData(biodata, resultsForSaving);
-          
-          // Save to Google Sheets (in background)
-          await saveToGoogleSheet({
-            ...biodata, 
-            results: resultsForSaving
-          });
-          
-        } catch (error) {
-          console.error('Background save error:', error);
-          // Continue silently - don't show error to user
-        }
-      }, 100);
-      
-      // Continue to next stage immediately
-      nextStage();
-      
-    } catch (error) {
-      console.error('Error in auto-save:', error);
-      // Still continue to next stage even if save fails
-      nextStage();
-    } finally {
-      setIsSaving(false);
-    }
-  };
   
   const handleNext = async () => {
     const allAnswers = getCurrentAnswers();
@@ -185,13 +125,60 @@ export default function QuestionBatch() {
       return;
     }
     
-    // If this is the final batch, auto-save before proceeding
+    // Record all answers for this batch first
+    recordBatchAnswers(allAnswers);
+    
+    // If this is the final batch, save and calculate results
     if (isFinalBatch()) {
-      await handleAutoSave(allAnswers);
-    } else {
-      // Record all answers for this batch
-      recordBatchAnswers(allAnswers);
+      setIsSaving(true);
       
+      // Wait for state to update, then calculate and proceed
+      setTimeout(() => {
+        try {
+          // Calculate results and get the actual calculated data
+          const calculatedResults = calculateResults();
+          
+          // Save in background using ACTUAL calculated results
+          setTimeout(async () => {
+            try {
+              const roleNames = {
+                networkAdmin: "Network Administrator",
+                cybersecurity: "Cybersecurity"
+              };
+              
+              const resultsForSaving = {
+                role: selectedRole,
+                roleName: roleNames[selectedRole],
+                successRate: calculatedResults.successRate, // Use ACTUAL calculated rate
+                strengths: calculatedResults.strengths, // Keep as array - let googleSheets.js handle the joining
+                weaknesses: calculatedResults.weaknesses, // Keep as array - let googleSheets.js handle the joining
+                recommendations: calculatedResults.recommendations.map(rec => 
+                  typeof rec === 'string' ? rec : rec.courseName
+                ) // Keep as array - let googleSheets.js handle the joining
+              };
+              
+              await saveUserData(biodata, resultsForSaving);
+              await saveToGoogleSheet({ ...biodata, results: resultsForSaving });
+              
+            } catch (error) {
+              console.error('Background save error:', error);
+            }
+          }, 100);
+          
+          // Move to next stage
+          setTimeout(() => {
+            setIsSaving(false);
+            nextStage();
+          }, 300);
+          
+        } catch (error) {
+          console.error('Error processing final batch:', error);
+          setIsSaving(false);
+          nextStage();
+        }
+      }, 200);
+      
+    } else {
       // Reset local state for next batch
       setBatchAnswers({});
       setShowExplanations({});
