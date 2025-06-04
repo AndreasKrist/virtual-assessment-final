@@ -9,7 +9,7 @@ export default function Results() {
   
   // Map role IDs to readable names
   const roleNames = {
-    networkAdmin: "Network Administrator",
+    networkAdmin: "Network Administration",  // CHANGED: Was "Network Administrator"
     cybersecurity: "Cybersecurity"
   };
   

@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 
 export default function AvatarGuide() {
-  // Removed isVisible state since we always want the avatar to be visible
   const [currentMessage, setCurrentMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
   const [avatarExpression, setAvatarExpression] = useState('happy');
@@ -15,6 +14,7 @@ export default function AvatarGuide() {
   const lastInteractionRef = useRef(Date.now());
   const [userClosedMessage, setUserClosedMessage] = useState(false);
   const lastStageRef = useRef(stage);
+  const autoHideTimerRef = useRef(null);
   
   // Helper function to create button-like styling in messages
   const createButtonText = (text) => {
@@ -41,7 +41,7 @@ export default function AvatarGuide() {
         return `${firstName}! 📝 I see you're on the information page. Please fill in all the required fields (marked with red *), then click the ${createButtonText('Continue')} button at the bottom to move to the next step. Don't worry, your information is safe with us!`;
       
       case 'roleSelection':
-        return `${firstName}! 🎯 I see you need to choose your discipline. Click on either "Network Administrator" or "Cybersecurity" - the box will turn blue when selected. Then click the ${createButtonText('Continue')} button at the bottom to proceed with your chosen path!`;
+        return `${firstName}! 🎯 I see you need to choose your discipline. Click on either "Network Administration" or "Cybersecurity" - the box will turn blue when selected. Then click the ${createButtonText('Continue')} button at the bottom to proceed with your chosen path!`;
       
       case 'generalQuestions':
         if (currentBatch === 0) {
@@ -63,6 +63,14 @@ export default function AvatarGuide() {
     }
   }, [biodata.fullName, router.pathname, stage, currentBatch, selectedRole, createButtonText]);
   
+  // Clear any existing auto-hide timer
+  const clearAutoHideTimer = useCallback(() => {
+    if (autoHideTimerRef.current) {
+      clearTimeout(autoHideTimerRef.current);
+      autoHideTimerRef.current = null;
+    }
+  }, []);
+  
   // Reset inactivity timer whenever user interacts
   const resetInactivityTimer = useCallback(() => {
     lastInteractionRef.current = Date.now();
@@ -70,20 +78,16 @@ export default function AvatarGuide() {
       clearTimeout(inactivityTimerRef.current);
     }
     
-    // Set new timer for auto-popup after 8 seconds of inactivity
+    // Set new timer for auto-popup after 8 seconds of inactivity (only if user didn't manually close)
     inactivityTimerRef.current = setTimeout(() => {
-      if (!showMessage && !userClosedMessage) { // Don't show if user manually closed
+      if (!showMessage && !userClosedMessage) {
         const helpMessage = getHelpMessage();
         setCurrentMessage(helpMessage);
         setAvatarExpression('helpful');
         setShowMessage(true);
-        
-        // Auto-hide after 15 seconds
-        setTimeout(() => {
-          setShowMessage(false);
-        }, 15000);
+        // NO AUTO-HIDE TIMER - message stays until manually closed
       }
-    }, router.pathname === '/' ? 7000 : 8000); // Shorter delay on home page
+    }, router.pathname === '/' ? 7000 : 8000);
   }, [showMessage, getHelpMessage, router.pathname, userClosedMessage]);
 
   // Track user interactions
@@ -202,7 +206,7 @@ Ready to start this journey? I'll be with you every step of the way! 🚀`;
         return `This is exciting, ${firstName}! 🚀 Time to choose your IT adventure!
 
 🎯 **What to do here:**
-1. Read about both options: Network Administrator and Cybersecurity
+1. Read about both options: Network Administration and Cybersecurity
 2. Click on the box of your preferred choice (it will turn blue)
 3. Click the ${createButtonText('Continue')} button at the bottom
 
@@ -332,7 +336,7 @@ Which one calls to you? 🤔`;
     }
   };
   
-  // Update message when stage changes, but don't show immediately on home page
+  // Update message when stage changes, but don't show immediately
   useEffect(() => {
     const newMessage = getContextualMessage();
     setCurrentMessage(newMessage);
@@ -341,28 +345,26 @@ Which one calls to you? 🤔`;
     const stageChanged = stage !== lastStageRef.current;
     lastStageRef.current = stage;
     
-    // Only auto-show message if NOT on home page AND stage actually changed OR user didn't manually close
-    if (router.pathname !== '/' && (stageChanged || !userClosedMessage)) {
-      // Only show if stage changed or user hasn't manually closed the message
-      if (stageChanged) {
-        setShowMessage(true);
-        setUserClosedMessage(false); // Reset the manual close flag on stage change
-        
-        // Auto-hide message after 12 seconds (longer for detailed messages)
-        const timer = setTimeout(() => {
-          setShowMessage(false);
-        }, 12000);
-        
-        return () => clearTimeout(timer);
-      }
+    // When stage changes, just update the message content but DON'T show immediately
+    if (stageChanged) {
+      // Clear any auto-hide timer
+      clearAutoHideTimer();
+      
+      // Reset the manual close flag on stage change so inactivity timer can work
+      setUserClosedMessage(false);
+      
+      // DON'T show immediately - let the inactivity timer handle it
     }
     
-    // Reset inactivity timer when stage changes
+    // Reset inactivity timer when stage changes (this will start the 7-8 second delay)
     resetInactivityTimer();
-  }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate, resetInactivityTimer, getContextualMessage, userClosedMessage]);
+  }, [stage, router.pathname, currentBatch, selectedRole, biodata.fullName, results.successRate, resetInactivityTimer, getContextualMessage, clearAutoHideTimer]);
   
   // Toggle message visibility when avatar is clicked
   const handleAvatarClick = () => {
+    // Clear any auto-hide timer
+    clearAutoHideTimer();
+    
     if (showMessage) {
       setShowMessage(false);
       setUserClosedMessage(true); // Track that user manually closed
@@ -372,10 +374,7 @@ Which one calls to you? 🤔`;
       setShowMessage(true);
       setUserClosedMessage(false); // Reset when user manually opens
       
-      // Auto-hide after 12 seconds
-      setTimeout(() => {
-        setShowMessage(false);
-      }, 12000);
+      // NO AUTO-HIDE TIMER - message stays until manually closed
     }
     
     // Reset activity timer when user clicks avatar
@@ -385,7 +384,19 @@ Which one calls to you? 🤔`;
   // Reset manual close flag when route changes
   useEffect(() => {
     setUserClosedMessage(false);
-  }, [router.pathname]);
+    // Also clear any auto-hide timers when route changes
+    clearAutoHideTimer();
+  }, [router.pathname, clearAutoHideTimer]);
+  
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+      clearAutoHideTimer();
+    };
+  }, [clearAutoHideTimer]);
   
   // Don't show on admin page
   if (router.pathname === '/admin') {
@@ -408,6 +419,7 @@ Which one calls to you? 🤔`;
                 <h4 className="text-base font-semibold text-blue-800">Virtual Assistant 🤖</h4>
                 <button
                   onClick={() => {
+                    clearAutoHideTimer(); // Clear any auto-hide timer
                     setShowMessage(false);
                     setUserClosedMessage(true); // Track manual close
                   }}

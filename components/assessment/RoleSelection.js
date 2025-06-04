@@ -10,7 +10,7 @@ export default function RoleSelection() {
   const roles = [
     {
       id: 'networkAdmin',
-      title: 'Network Administrator',
+      title: 'Network Administration',  // CHANGED: Was "Network Administrator"
       description: 'Manage and maintain computer networks, ensuring they function efficiently and securely.',
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 sm:h-16 sm:w-16 text-blue-500 mb-3 sm:mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

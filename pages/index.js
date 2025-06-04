@@ -149,7 +149,7 @@ export default function Home() {
                 </h2>
                 <p className="text-base sm:text-lg text-blue-700 mb-4">
                   {/* This assessment helps you discover your potential in Tech and provides personalized course recommendations to boost your career. */}
-                  This assessment is your first step towards discovering a possible carrer in Tech.
+                  This assessment is your first step towards discovering a possible career in Tech
                   {/* We'll assess your skills and recommend personalized courses to help you achieve your goals. */}
                 </p>
                 <p className="text-sm sm:text-base text-blue-600">
