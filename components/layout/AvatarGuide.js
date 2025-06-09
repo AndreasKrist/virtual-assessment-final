@@ -30,7 +30,7 @@ export default function AvatarGuide() {
     }
     
     if (router.pathname === '/results') {
-      return `${firstName}, congratulations on completing your assessment! 🎉 Your results have been automatically saved to our database. You can click ${createButtonText('Start Over')} if you want to take the assessment again or explore different career paths.`;
+      return `${firstName}, congratulations on completing your assessment! 🎉 Your results have been saved!. You can click ${createButtonText('Start Over')} if you want to take the assessment again or explore different career paths.`;
     }
     
     switch (stage) {
@@ -123,7 +123,8 @@ export default function AvatarGuide() {
       setAvatarExpression('welcoming');
       return `Hello ${firstName}! 👋 Welcome to ITEL's PTSA: Prelim Tech Skills Assessor! I'm your virtual assistant and I'll help you every step of the way. 
 
-🎯 **What to do now:** Click the ${createButtonText('Start Assessment')} button below to begin discovering your IT potential! 
+🎯 <b>What to do now: </b>
+Click the ${createButtonText('Start Assessment')} button below to begin discovering your IT potential! 
 
 I'll be here throughout your journey to provide helpful tips and guidance. Let's get started! 🚀`;
     }
@@ -134,11 +135,11 @@ I'll be here throughout your journey to provide helpful tips and guidance. Let's
         setAvatarExpression('excited');
         return `Wow, ${firstName}! 🌟 Outstanding work! You scored ${successRate}%! 
 
-🎉 **What this means:** You have excellent potential in your chosen field!
+🎉 <b>What this means:</b> You have excellent potential in your chosen field!
 
-✅ **Great news:** Your results have been automatically saved to our database!
+✅ <b>Great news:</b> Your results have been saved!
 
-📋 **What to do now:** 
+📋 <b>What to do now:</b> 
 1. Review your personalized recommendations below
 2. Contact ITEL about the recommended courses
 3. You can click ${createButtonText('Start Over')} to explore other career paths
@@ -148,11 +149,11 @@ You're on a great path to IT success! 🚀`;
         setAvatarExpression('encouraging');
         return `Great job, ${firstName}! 👏 You scored ${successRate}% - that shows real potential!
 
-💪 **What this means:** You have a solid foundation to build upon!
+💪 <b>What this means:</b> You have a solid foundation to build upon!
 
-✅ **Great news:** Your results have been automatically saved to our database!
+✅ <b>Great news:</b> Your results have been saved!
 
-📋 **What to do now:**
+📋 <b>What to do now:</b>
 1. Check your course recommendations below - they're designed just for you!
 2. Don't worry about areas you're unfamiliar with - that's why we have courses!
 3. Click ${createButtonText('Start Over')} if you want to explore other paths
@@ -162,11 +163,11 @@ Every expert was once a beginner! 🌟`;
         setAvatarExpression('supportive');
         return `Don't worry, ${firstName}! 💪 Everyone starts somewhere, and your ${successRate}% shows you're ready to learn!
 
-🌱 **What this means:** You have great potential - you just need the right training!
+🌱 <b>What this means:</b> You have great potential - you just need the right training!
 
-✅ **Great news:** Your results have been automatically saved to our database!
+✅ <b>Great news:</b> Your results have been saved!
 
-📋 **What to do now:**
+📋 <b>What to do now:</b>
 1. Look at your personalized course recommendations below
 2. Remember: Every IT expert started exactly where you are now!
 3. Click ${createButtonText('Start Over')} to try a different career path
@@ -180,7 +181,7 @@ The courses I've recommended will build your confidence and skills step by step!
         setAvatarExpression('happy');
         return `Hi ${firstName}! 🌟 I'm so excited to help you discover your IT potential!
 
-🎯 **What we'll do together:**
+🎯 <b>What we'll do together:</b>
 1. First, I'll ask for some basic information about you
 2. Then you'll choose between Network Administration or Cybersecurity  
 3. We'll go through some simple Yes/No questions
@@ -192,25 +193,25 @@ Ready to start this journey? I'll be with you every step of the way! 🚀`;
         setAvatarExpression('curious');
         return `Perfect, ${firstName}! 📝 Now I need to get to know you a little better.
 
-📋 **What to do here:**
+📋 <b>What to do here:</b>
 1. Fill in your Full Name (required)
 2. Enter your Email Address (required) 
 3. Add your Phone Number (optional)
 4. Select your Age Group (required)
 5. Click the ${createButtonText('Continue')} button at the bottom
 
-⚡ **Tip:** Look for the red * - those fields are required! Don't worry, your information is completely safe and secure with us. 🔒`;
+⚡ <b>Tip:</b> Look for the red * - those fields are required! Don't worry, your information is completely safe and secure with us. 🔒`;
       
       case 'roleSelection':
         setAvatarExpression('excited');
         return `This is exciting, ${firstName}! 🚀 Time to choose your IT adventure!
 
-🎯 **What to do here:**
+🎯 <b>What to do here:</b>
 1. Read about both options: Network Administration and Cybersecurity
 2. Click on the box of your preferred choice (it will turn blue)
 3. Click the ${createButtonText('Continue')} button at the bottom
 
-💡 **Don't worry about choosing "wrong"** - both are fantastic careers! Pick the one that sounds more interesting to you. You can always change your mind later! 
+💡 <b>Don't worry about choosing "wrong"</b> - both are fantastic careers! Pick the one that sounds more interesting to you. You can always change your mind later! 
 
 Which one calls to you? 🤔`;
       
@@ -219,25 +220,25 @@ Which one calls to you? 🤔`;
           setAvatarExpression('encouraging');
           return `Great job getting here, ${firstName}! 💻 Now for some basic IT questions.
 
-📋 **How to answer these questions:**
+📋 <b>How to answer these questions:</b>
 1. Read each question carefully
 2. Click ${createButtonText('Yes')} if you can do it, ${createButtonText('No')} if you can't
 3. Be honest - there are no wrong answers!
 4. If you click ${createButtonText('No')}, you can click "Learn more" to see how we can help
 5. After answering ALL questions, click ${createButtonText('Continue')} at the bottom
 
-⚡ **Important:** Answer every single question before clicking Continue. Take your time! 🕐`;
+⚡ <b>Important:</b> Answer every single question before clicking Continue. Take your time! 🕐`;
         } else {
           setAvatarExpression('proud');
           return `You're doing amazing, ${firstName}! 🌟 These are the final general questions.
 
-📋 **What to do:**
+📋 <b>What to do:</b>
 1. Continue answering ${createButtonText('Yes')} or ${createButtonText('No')} to each question
 2. Remember, honesty helps us give you better recommendations
 3. Answer every question on this page
 4. Click ${createButtonText('Continue')} when you're completely done
 
-🎉 **You're halfway through!** After this, we'll move to your specialized questions. Keep going! 💪`;
+🎉 <b>You're halfway through!</b> After this, we'll move to your specialized questions. Keep going! 💪`;
         }
       
       case 'roleQuestions':
@@ -246,46 +247,46 @@ Which one calls to you? 🤔`;
           setAvatarExpression('focused');
           return `Excellent choice, ${firstName}! 🎯 Now for ${roleName} specific questions.
 
-📋 **What to do here:**
+📋 <b>What to do here:</b>
 1. These questions are about your chosen field: ${roleName}
 2. Click ${createButtonText('Yes')} if you know/can do it, ${createButtonText('No')} if you don't
 3. Don't worry if you answer ${createButtonText('No')} to many - that's totally normal!
 4. Answer ALL questions, then click ${createButtonText('Continue')}
 
-💡 **Remember:** We're not testing you - we're learning how to help you succeed! Be honest so we can recommend the perfect courses. 🎓`;
+💡 <b>Remember:</b> We're not testing you - we're learning how to help you succeed! Be honest so we can recommend the perfect courses. 🎓`;
         } else {
           setAvatarExpression('cheerful');
           return `Almost there, ${firstName}! 🏁 These are your final ${roleName} questions!
 
-📋 **Final steps:**
+📋 <b>Final steps:</b>
 1. Answer these last questions with ${createButtonText('Yes')} or ${createButtonText('No')}
 2. Be honest about your current knowledge
 3. Answer every single question
 4. Click ${createButtonText('Continue')} to automatically save and see your results!
 
-🎉 **You're about to see:** Your success rate, your strengths, areas to improve, and custom course recommendations just for you! Your results will be automatically saved to our database! Exciting! 🌟`;
+🎉 <b>You're about to see:</b> Your success rate, your strengths, areas to improve, and custom course recommendations just for you! Your results will be automatically saved to our database! Exciting! 🌟`;
         }
       
       case 'results':
         setAvatarExpression('celebrating');
         return `Congratulations, ${firstName}! 🎉 You've completed your assessment!
 
-🏆 **What you've accomplished:**
+🏆 <b>What you've accomplished:</b>
 ✅ Completed your personal IT skills assessment
 ✅ Discovered your strengths and growth areas  
 ✅ Received personalized course recommendations
-✅ Your results have been automatically saved to our database!
+✅ Your results have been saved!
 ✅ Taken the first step toward your IT career!
 
-🎯 **Next steps:** Review your results and consider the recommended courses. I'm so proud of you for taking this important step toward your future! 🌟`;
+🎯 <b>Next steps:</b> Review your results and consider the recommended courses. I'm so proud of you for taking this important step toward your future! 🌟`;
       
       default:
         setAvatarExpression('happy');
         return `Hey ${firstName}! 😊 I'm your friendly assessment guide, and I'm here to help you succeed!
 
-💡 **Need help?** Just click on me anytime for guidance on what to do next. I'll give you step-by-step instructions to make this assessment easy and stress-free!
+💡 <b>Need help?</b> Just click on me anytime for guidance on what to do next. I'll give you step-by-step instructions to make this assessment easy and stress-free!
 
-🚀 **Remember:** There are no wrong answers - we're here to discover how to help you succeed in IT!`;
+🚀 <b>Remember:</b> There are no wrong answers - we're here to discover how to help you succeed in IT!`;
     }
   }, [biodata.fullName, router.pathname, stage, currentBatch, selectedRole, results.successRate, createButtonText]);
   
