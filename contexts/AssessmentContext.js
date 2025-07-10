@@ -14,6 +14,7 @@ export function AssessmentProvider({ children }) {
     email: '',
     phone: '',
     ageGroup: '',
+    consultant: '', // NEW: Add this line
   });
 
   // Selected role
@@ -361,6 +362,7 @@ export function AssessmentProvider({ children }) {
       email: '',
       phone: '',
       ageGroup: '',
+      consultant: '', // NEW: Add this line
     });
     setSelectedRole(null);
     setStage('welcome');

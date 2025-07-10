@@ -1,6 +1,6 @@
 /* Define all questions here */
 
-// Biodata questions
+// Biodata questions - UPDATED with Consultant field
 export const biodataQuestions = [
   {
     id: "fullName",
@@ -26,10 +26,29 @@ export const biodataQuestions = [
     type: "select",
     options: ["18-24", "25-34", "35-44", "45-54", "55+"],
     required: true,
+  },
+  // NEW: Consultant field
+  {
+    id: "consultant",
+    label: "Consultant",
+    type: "select",
+    options: [
+      "Melvin Tan", 
+      "Irish M", 
+      "Ann Loh", 
+      "Jovelyn Balili", 
+      "Leslie Carsula", 
+      "Stanley Lim", 
+      "Marvin Costales", 
+      "Jennifer Tan", 
+      "Ian Morrison", 
+      "Carolyn Leong"
+    ],
+    required: true,
   }
 ];
 
-// General IT questions
+// General IT questions (unchanged)
 export const generalQuestions = [
   {
     id: "generalQ1",
@@ -93,13 +112,13 @@ export const generalQuestions = [
   }
 ];
 
-// Network Admin questions
+// Network Admin questions (unchanged)
 export const networkAdminQuestions = [
   {
     id: "networkQ1",
     text: "Do you know what the Internet is and what it is used for?",
     courseRecommendation: "Introduction to Internet Technologies",
-    category: "networking" // CHANGED: was "internet", now grouped under "networking"
+    category: "networking"
   },
   {
     id: "networkQ2",
@@ -109,7 +128,7 @@ export const networkAdminQuestions = [
   },
   {
     id: "networkQ3",
-    text: "Have you ever entered a password to access a Wi-Fi network?", //change
+    text: "Have you ever entered a password to access a Wi-Fi network?",
     courseRecommendation: "Wi-Fi Network Configuration Basics",
     category: "connectivity"
   },
@@ -157,7 +176,7 @@ export const networkAdminQuestions = [
   }
 ];
 
-// Cybersecurity questions
+// Cybersecurity questions (unchanged)
 export const cybersecurityQuestions = [
   {
     id: "cyberQ1",
@@ -193,25 +212,25 @@ export const cybersecurityQuestions = [
     id: "cyberQ6",
     text: "Have you heard of encryption?",
     courseRecommendation: "Data Encryption Fundamentals",
-    category: "encryption" // KEPT: This will be the main encryption category
+    category: "encryption"
   },
   {
     id: "cyberQ7",
     text: "Do you know what multifactor authentication means?",
     courseRecommendation: "Authentication Methods and Security",
-    category: "encryption" // CHANGED: was "authentication", now grouped under "encryption"
+    category: "encryption"
   },
   {
     id: "cyberQ8",
     text: "Do you know what a secure website looks like in your browser?",
     courseRecommendation: "Web Security Indicators",
-    category: "networking" // CHANGED: was "webSecurity", now grouped under "networking"
+    category: "networking"
   },
   {
     id: "cyberQ9",
     text: "Are you familiar with what DNS is?",
     courseRecommendation: "DNS and Network Security",
-    category: "networking" // KEPT: This stays as networking
+    category: "networking"
   },
   {
     id: "cyberQ10",
@@ -221,13 +240,13 @@ export const cybersecurityQuestions = [
   }
 ];
 
-// Map role to questions set
+// Map role to questions set (unchanged)
 export const roleQuestions = {
   "networkAdmin": networkAdminQuestions,
   "cybersecurity": cybersecurityQuestions
 };
   
-// Course catalog with detailed information
+// Course catalog with detailed information (unchanged)
 export const courseCatalog = {
   "Computer Basics 101": {
     title: "Computer Basics 101",
