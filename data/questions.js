@@ -34,15 +34,12 @@ export const biodataQuestions = [
     type: "select",
     options: [
       "Melvin Tan",
-      "Irish M",
       "Ann Loh",
       "Jovelyn Balili",
-      "Leslie Carsula",
+      "Tang Hiang Joo",
+      "Amaylia Lay",
       "Stanley Lim",
       "Marvin Costales",
-      "Jennifer Tan",
-      "Hiang Joo",
-      "Amalyia",
       "Ian Morrison",
       "Carolyn Leong"
     ],
